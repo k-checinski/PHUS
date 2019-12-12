@@ -2,6 +2,13 @@
 
 #include "../code/Sequence.h"
 
+TEST_CASE("Occurence of item in sequence is checked correctly") {
+    Sequence seq = {Transaction{{1, 5}}, Transaction{{2, 1}, {3, 2}}};
+    REQUIRE(has_item(1, seq));
+    REQUIRE(has_item(2, seq));
+    REQUIRE_FALSE(has_item(4, seq));
+}
+
 TEST_CASE("Utility of an item is calculated correctly", "[Utility]") {
     ProfitTable pt;
     Item a = 1;

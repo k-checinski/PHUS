@@ -6,10 +6,10 @@ inline bool has_item(const Item& item, const Transaction& transaction) {
 
 bool has_item(const Item& item, const Sequence& sequence) {
     for (const Transaction & transaction : sequence) {
-        if (!has_item(item, transaction))
-            return false;
+        if (has_item(item, transaction))
+            return true;
     }
-    return true;
+    return false;
 }
 
 inline unsigned item_count(const Item& item, const Transaction& transaction) {
