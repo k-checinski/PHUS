@@ -4,6 +4,14 @@ inline bool has_item(const Item& item, const Transaction& transaction) {
     return transaction.count(item) != 0;
 }
 
+bool has_item(const Item& item, const Sequence& sequence) {
+    for (const Transaction & transaction : sequence) {
+        if (!has_item(item, transaction))
+            return false;
+    }
+    return true;
+}
+
 inline unsigned item_count(const Item& item, const Transaction& transaction) {
     return transaction.count(item) != 0 ? transaction.at(item) : 0;
 }
@@ -30,6 +38,15 @@ unsigned sequence_utility(const Sequence& seq, const ProfitTable& profit_table) 
     unsigned utility = 0;
     for (const Transaction& t : seq) {
         utility += transaction_utility(t, profit_table);
+    }
+    return utility;
+}
+
+unsigned sequence_utility_upper_bound(const Item& item, const SDB& sdb, const ProfitTable& profit_table) {
+    unsigned utility = 0;
+    for (const Sequence& seq : sdb) {
+        if (has_item(item, seq))
+            utility += sequence_utility(seq, profit_table);
     }
     return utility;
 }
