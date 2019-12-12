@@ -8,15 +8,16 @@
 #include <list>
 #include <set>
 #include <map>
-#include <utility>
 
-typedef unsigned ItemType;
-typedef std::pair<ItemType, unsigned> Item;
-typedef std::set<Item> Transaction;
+typedef unsigned Item;
+
+typedef std::map<Item, unsigned> Transaction;
 typedef std::list<Transaction> Sequence;
-typedef std::map<ItemType, unsigned> ProfitTable;
+typedef std::map<Item, unsigned> ProfitTable;
 typedef std::list<Sequence> SDB;
 
+inline bool has_item(const Item& item, const Transaction& transaction);
+inline unsigned item_count(const Item& item, const Transaction& transaction);
 unsigned utility_of_item(const Item& item, const Sequence& seq, const ProfitTable& profit_table);
 unsigned utility_of_subsequence(const Sequence& subseq, const Sequence& seq, const ProfitTable& profit_table);
 unsigned actual_sequence_utility(const Sequence& seq, const SDB& sdb, const ProfitTable& profit_table);
