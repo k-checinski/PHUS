@@ -21,6 +21,18 @@ TEST_CASE("Utility of an item is calculated correctly", "[Utility]") {
     REQUIRE(utility_of_item(b, seq, pt) == 30);
 }
 
+TEST_CASE("Actual sequence utility is calculated correctly for single items") {
+    ProfitTable pt = {{1, 5}, {2, 10}, {3, 7}};
+    Sequence seq1 = {Transaction{{1, 4}, {2, 3}}, Transaction{{1, 5}}};
+    Sequence seq2 = {Transaction{{3, 1}, {2, 5}}, Transaction{{2, 1}}};
+    Sequence seq3 = {Transaction{{1, 1}}};
+    SDB sdb = {seq1, seq2, seq3};
+
+    REQUIRE(actual_sequence_utility(1, sdb, pt) == 30);
+    REQUIRE(actual_sequence_utility(2, sdb, pt) == 80);
+
+}
+
 TEST_CASE("Utility of a sequence is calculated correctly", "[Utility]") {
     ProfitTable pt;
     Item a = 1;

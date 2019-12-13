@@ -33,6 +33,13 @@ unsigned utility_of_item(const Item& item, const Sequence& seq, const ProfitTabl
     return max_util;
 }
 
+unsigned actual_sequence_utility(const Item& item, const SDB& sdb, const ProfitTable& profit_table) {
+    unsigned utility = 0;
+    for (const Sequence& seq : sdb) {
+        utility += utility_of_item(item, seq, profit_table);
+    }
+    return utility;
+}
 
 unsigned sequence_utility(const Sequence& seq, const ProfitTable& profit_table) {
     unsigned utility = 0;
