@@ -52,3 +52,26 @@ TEST_CASE("Sequence Utility Upper-Bound is calculated correctly for item", "[Uti
 
     REQUIRE(sequence_utility_upper_bound(1, sdb, pt) == 80);
 }
+
+TEST_CASE("Removing items from transaction works") {
+    Transaction trans = {{1, 5}, {2, 3}, {1, 5}};
+    REQUIRE(remove_items_from_transaction(std::set<Item>({1}), trans).size() == 1);
+    REQUIRE(remove_items_from_transaction(std::set<Item>({1, 2}), trans).empty());
+}
+
+TEST_CASE("Removing items from sequence works") {
+    Sequence seq = {Transaction{{3, 1}, {2, 5}}, Transaction{{2, 1}}};
+    Sequence filtered_seq = remove_items_from_sequence(std::set<Item>({3}), seq);
+    Sequence filtered_seq2 = remove_items_from_sequence(std::set<Item>({2}), seq);
+    REQUIRE(filtered_seq.begin()->size() == 1);
+    REQUIRE(filtered_seq2.size() == 1);
+}
+
+TEST_CASE("Removing items from SDB works") {
+    Sequence seq1 = {Transaction{{1, 4}, {2, 3}}, Transaction{{1, 5}}};
+    Sequence seq2 = {Transaction{{3, 1}, {2, 5}}, Transaction{{2, 1}}};
+    Sequence seq3 = {Transaction{{1, 1}}};
+    SDB sdb = {seq1, seq2, seq3};
+    SDB filtered_sdb = remove_items_from_SDB(std::set<Item>({1}), sdb);
+    REQUIRE(filtered_sdb.size() == 2);
+}

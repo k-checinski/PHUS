@@ -27,4 +27,8 @@ unsigned actual_sequence_utility(const Sequence& seq, const SDB& sdb, const Prof
 unsigned sequence_utility(const Sequence& seq, const ProfitTable& profit_table);
 unsigned sequence_utility_upper_bound(const Sequence& seq, const SDB& sdb, const ProfitTable& profit_table);
 unsigned sequence_utility_upper_bound(const Item& item, const SDB& sdb, const ProfitTable& profit_table);
+
+Transaction remove_items_from_transaction(const std::set<Item>& items, const Transaction& transaction);
+Sequence remove_items_from_sequence(const std::set<Item>& items, const Sequence& sequence);
+SDB remove_items_from_SDB(const std::set<Item>& items, const SDB& sdb);
 #endif //PHUS_EDAMI_SEQUENCE_H
