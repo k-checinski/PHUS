@@ -58,20 +58,20 @@ unsigned sequence_utility_upper_bound(const Item& item, const SDB& sdb, const Pr
     return utility;
 }
 
-Transaction remove_items_from_transaction(const std::set<Item> &items, const Transaction &transaction) {
+Transaction filter_transaction(const std::set<Item> &items, const Transaction &transaction) {
     Transaction new_trans;
     for (auto const& elem : transaction) {
-        if (items.find(elem.first) == items.end()) {
+        if (items.find(elem.first) != items.end()) {
             new_trans[elem.first] = elem.second;
         }
     }
     return new_trans;
 }
 
-Sequence remove_items_from_sequence(const std::set<Item>& items, const Sequence& sequence) {
+Sequence filter_sequence(const std::set<Item>& items, const Sequence& sequence) {
     Sequence new_sequence;
     for (const Transaction& trans : sequence) {
-        Transaction filtered_trans = remove_items_from_transaction(items, trans);
+        Transaction filtered_trans = filter_transaction(items, trans);
         if (!filtered_trans.empty()) {
             new_sequence.push_back(filtered_trans);
         }
@@ -79,10 +79,10 @@ Sequence remove_items_from_sequence(const std::set<Item>& items, const Sequence&
     return new_sequence;
 }
 
-SDB remove_items_from_SDB(const std::set<Item>& items, const SDB& sdb) {
+SDB filter_SDB(const std::set<Item>& items, const SDB& sdb) {
     SDB new_sdb;
     for (const Sequence& sequence : sdb) {
-        Sequence filtered_sequence = remove_items_from_sequence(items, sequence);
+        Sequence filtered_sequence = filter_sequence(items, sequence);
         if (!filtered_sequence.empty()) {
             new_sdb.push_back(filtered_sequence);
         }
