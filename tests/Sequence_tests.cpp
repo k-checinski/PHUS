@@ -75,3 +75,8 @@ TEST_CASE("Filtering SDB works") {
     SDB filtered_sdb = filter_SDB(std::set<Item>({2, 3}), sdb);
     REQUIRE(filtered_sdb.size() == 2);
 }
+
+TEST_CASE("Items in sequence are counted correctly") {
+    Sequence seq = {Transaction{{1, 1}, {2, 1}}, Transaction{{1, 2}}, Transaction{{4, 1}}};
+    REQUIRE(count_items(seq) == 4);
+}

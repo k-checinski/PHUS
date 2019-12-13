@@ -89,3 +89,11 @@ SDB filter_SDB(const std::set<Item>& items, const SDB& sdb) {
     }
     return new_sdb;
 }
+
+unsigned count_items(const Sequence &sequence) {
+    unsigned items = 0;
+    for (const Transaction& transaction : sequence) {
+        items += transaction.size();
+    }
+    return items;
+}

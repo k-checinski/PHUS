@@ -31,4 +31,6 @@ unsigned sequence_utility_upper_bound(const Item& item, const SDB& sdb, const Pr
 Transaction filter_transaction(const std::set<Item>& items, const Transaction& transaction);
 Sequence filter_sequence(const std::set<Item>& items, const Sequence& sequence);
 SDB filter_SDB(const std::set<Item>& items, const SDB& sdb);
+
+unsigned count_items(const Sequence& sequence);
 #endif //PHUS_EDAMI_SEQUENCE_H
