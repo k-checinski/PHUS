@@ -53,12 +53,6 @@ TEST_CASE("Sequence Utility Upper-Bound is calculated correctly for item", "[Uti
     REQUIRE(sequence_utility_upper_bound(1, sdb, pt) == 80);
 }
 
-TEST_CASE("Filtering transaction works") {
-    Transaction trans = {{1, 5}, {2, 3}, {1, 5}};
-    REQUIRE(filter_transaction(std::set<Item>({2}), trans).size() == 1);
-    REQUIRE(filter_transaction(std::set<Item>({}), trans).empty());
-}
-
 TEST_CASE("Filtering sequence works") {
     Sequence seq = {Transaction{{3, 1}, {2, 5}}, Transaction{{2, 1}}};
     Sequence filtered_seq = filter_sequence(std::set<Item>({2}), seq);
