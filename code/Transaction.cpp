@@ -5,7 +5,7 @@
 #include "Transaction.h"
 
 inline bool has_item(const Item& item, const Transaction& transaction) {
-    return transaction.item_count(item) != 0;
+    return item_count(item, transaction) != 0;
 }
 
 inline unsigned item_count(const Item& item, const Transaction& transaction) {
