@@ -20,11 +20,8 @@ typedef std::list<Sequence> SDB;
 
 bool has_item(const Item& item, const Sequence& sequence);
 unsigned utility_of_item(const Item& item, const Sequence& seq, const ProfitTable& profit_table);
-unsigned utility_of_subsequence(const Sequence& subseq, const Sequence& seq, const ProfitTable& profit_table);
 unsigned actual_sequence_utility(const Item& item, const SDB& sdb, const ProfitTable& profit_table);
-unsigned actual_sequence_utility(const Sequence& seq, const SDB& sdb, const ProfitTable& profit_table);
 unsigned sequence_utility(const Sequence& seq, const ProfitTable& profit_table);
-unsigned sequence_utility_upper_bound(const Sequence& seq, const SDB& sdb, const ProfitTable& profit_table);
 unsigned sequence_utility_upper_bound(const Item& item, const SDB& sdb, const ProfitTable& profit_table);
 
 

@@ -1,9 +1,5 @@
 #include "Sequence.h"
 
-inline bool has_item(const Item& item, const Transaction& transaction) {
-    return transaction.count(item) != 0;
-}
-
 bool has_item(const Item& item, const Sequence& sequence) {
     for (const Transaction & transaction : sequence) {
         if (has_item(item, transaction))
