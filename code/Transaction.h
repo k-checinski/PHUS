@@ -1,7 +1,3 @@
-//
-// Created by jedikarix on 13.12.2019.
-//
-
 #ifndef PHUS_EDAMI_TRANSACTION_H
 #define PHUS_EDAMI_TRANSACTION_H
 
@@ -18,7 +14,7 @@ typedef std::map<Item, unsigned> Transaction;
  * @param transaction
  * @return
  */
-inline bool has_item(const Item& item, const Transaction& transaction);
+bool has_item(const Item& item, const Transaction& transaction);
 
 /**
  * Counts items in transaction.
@@ -26,7 +22,7 @@ inline bool has_item(const Item& item, const Transaction& transaction);
  * @param transaction
  * @return
  */
-inline unsigned item_count(const Item& item, const Transaction& transaction);
+unsigned item_count(const Item& item, const Transaction& transaction);
 
 /**
  * Computes utility of transaction. Sums items quantities multiplied by their utility in profit_table.

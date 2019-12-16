@@ -1,14 +1,10 @@
-//
-// Created by jedikarix on 13.12.2019.
-//
-
 #include "Transaction.h"
 
-inline bool has_item(const Item& item, const Transaction& transaction) {
+bool has_item(const Item& item, const Transaction& transaction) {
     return item_count(item, transaction) != 0;
 }
 
-inline unsigned item_count(const Item& item, const Transaction& transaction) {
+unsigned item_count(const Item& item, const Transaction& transaction) {
     return transaction.count(item) != 0 ? transaction.at(item) : 0;
 }
 
