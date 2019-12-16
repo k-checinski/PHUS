@@ -12,6 +12,6 @@ struct IndexTableRecord {
 };
 typedef std::map<Item, std::vector<IndexTableRecord> > IndexTable;
 
-IndexTable create_index_table(const SDB& sdb);
+IndexTable create_index_table(const SDB& sdb, const std::set<Item>& items);
 
 #endif //PHUS_EDAMI_INDEXTABLE_H
