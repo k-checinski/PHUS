@@ -7,12 +7,13 @@
 
 #include <list>
 #include <set>
+#include <vector>
 #include <map>
 
 typedef unsigned Item;
 typedef std::map<Item, unsigned> Transaction;
-typedef std::list<Transaction> Sequence;
+typedef std::vector<Transaction> Sequence;
 typedef std::map<Item, unsigned> ProfitTable;
-typedef std::list<Sequence> SDB;
+typedef std::vector<Sequence> SDB;
 
 #endif //PHUS_EDAMI_TYPES_H
