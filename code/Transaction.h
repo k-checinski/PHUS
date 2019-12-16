@@ -4,9 +4,7 @@
 #include <map>
 #include <set>
 
-typedef unsigned Item;
-typedef std::map<Item, unsigned> ProfitTable;
-typedef std::map<Item, unsigned> Transaction;
+#include "types.h"
 
 /**
  * Determines if transaction contains given item.

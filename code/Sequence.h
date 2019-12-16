@@ -7,12 +7,6 @@
 
 #include "Transaction.h"
 
-typedef unsigned Item;
-
-typedef std::list<Transaction> Sequence;
-typedef std::map<Item, unsigned> ProfitTable;
-typedef std::list<Sequence> SDB;
-
 /**
  * Determines if given item occurs in sequence
  * @param item
