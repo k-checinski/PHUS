@@ -1,7 +1,3 @@
-//
-// Created by jedikarix on 11.12.2019.
-//
-
 #ifndef PHUS_EDAMI_SEQUENCE_H
 #define PHUS_EDAMI_SEQUENCE_H
 
@@ -71,12 +67,13 @@ Sequence filter_sequence(const std::set<Item>& items, const Sequence& sequence);
 
 /**
  * Generates sequence database based on given database. Uses filter_sequence function for every sequence in sdb.
- * Removes empty sequences.
+ * Removes empty sequences and sequences shorter than min_length
  * @param items
  * @param sdb
+ * @param min_length
  * @return new database with given items only.
  */
-SDB filter_SDB(const std::set<Item>& items, const SDB& sdb);
+SDB filter_SDB(const std::set<Item>& items, const SDB& sdb, unsigned min_length=0);
 
 /**
  * Counts items in every transaction in sequence. E.g. for <{a(1), b(2)}, a(4), c(1)> returns 4.

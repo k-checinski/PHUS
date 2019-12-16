@@ -54,11 +54,12 @@ Sequence filter_sequence(const std::set<Item>& items, const Sequence& sequence) 
     return new_sequence;
 }
 
-SDB filter_SDB(const std::set<Item>& items, const SDB& sdb) {
+SDB filter_SDB(const std::set<Item>& items, const SDB& sdb, unsigned min_length) {
     SDB new_sdb;
+    min_length = min_length > 1 ? min_length : 1;
     for (const Sequence& sequence : sdb) {
         Sequence filtered_sequence = filter_sequence(items, sequence);
-        if (!filtered_sequence.empty()) {
+        if (count_items(filtered_sequence) >= min_length) {
             new_sdb.push_back(filtered_sequence);
         }
     }

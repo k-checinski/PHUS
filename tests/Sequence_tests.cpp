@@ -2,7 +2,7 @@
 
 #include "../code/Sequence.h"
 
-TEST_CASE("Occurence of item in sequence is checked correctly") {
+TEST_CASE("Appearance of item in sequence is checked correctly") {
     Sequence seq = {Transaction{{1, 5}}, Transaction{{2, 1}, {3, 2}}};
     REQUIRE(has_item(1, seq));
     REQUIRE(has_item(2, seq));
@@ -67,8 +67,11 @@ TEST_CASE("Filtering SDB works") {
     Sequence seq3 = {Transaction{{1, 1}}};
     SDB sdb = {seq1, seq2, seq3};
     SDB filtered_sdb = filter_SDB(std::set<Item>({2, 3}), sdb);
+    SDB filtered_sdb2 = filter_SDB(std::set<Item>({1, 2}), sdb, 3);
     REQUIRE(filtered_sdb.size() == 2);
+    REQUIRE(filtered_sdb2.size() == 1);
 }
+
 
 TEST_CASE("Items in sequence are counted correctly") {
     Sequence seq = {Transaction{{1, 1}, {2, 1}}, Transaction{{1, 2}}, Transaction{{4, 1}}};
