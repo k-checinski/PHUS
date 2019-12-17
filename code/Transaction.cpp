@@ -4,6 +4,15 @@ bool has_item(const Item& item, const Transaction& transaction) {
     return item_count(item, transaction) != 0;
 }
 
+bool has_items(const Transaction &transaction, const std::set<Item> &items) {
+    for (Item item : items) {
+        if (!has_item(item, transaction))
+            return false;
+    }
+    return true;
+}
+
+
 unsigned item_count(const Item& item, const Transaction& transaction) {
     return transaction.count(item) != 0 ? transaction.at(item) : 0;
 }
@@ -23,4 +32,12 @@ Transaction filter_transaction(const std::set<Item> &items, const Transaction &t
         }
     }
     return new_trans;
+}
+
+bool is_partition(const Transaction &subtransaction, const Transaction &transaction) {
+    for (auto const& item: subtransaction) {
+        if (!has_item(item.first, transaction))
+            return false;
+    }
+    return true;
 }
