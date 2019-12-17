@@ -6,6 +6,7 @@
 #include <map>
 
 #include "Transaction.h"
+#include "IndexTable.h"
 
 /**
  * Determines if given item occurs in sequence
@@ -75,4 +76,6 @@ SDB filter_SDB(const std::set<Item>& items, const SDB& sdb, unsigned min_length=
  * @return number of items in sequence
  */
 unsigned count_items(const Sequence& sequence);
+
+std::vector<unsigned> projected_sequences(Item item, const IndexTable& index_table, const SDB& base);
 #endif //PHUS_EDAMI_SEQUENCE_H

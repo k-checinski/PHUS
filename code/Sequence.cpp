@@ -73,3 +73,12 @@ unsigned count_items(const Sequence &sequence) {
     }
     return items;
 }
+
+std::vector<unsigned> projected_sequences(Item item, const IndexTable &index_table) {
+    std::vector<unsigned> sequences_ids;
+    for (auto const& index : index_table.at(item)) {
+        sequences_ids.push_back(index.sequence_id);
+    }
+    return sequences_ids;
+}
+
