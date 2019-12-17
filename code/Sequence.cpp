@@ -82,3 +82,22 @@ std::vector<unsigned> projected_sequences(Item item, const IndexTable &index_tab
     return sequences_ids;
 }
 
+Sequence::const_iterator prefix_end_position(const Sequence& prefix, const Sequence& sequence) {
+    auto sequence_iter = sequence.cbegin();
+    for (const Transaction& transaction: prefix) {
+        for (; sequence_iter != sequence.cend(); ++sequence_iter) {
+            if (is_partition(transaction, *sequence_iter)) {
+                ++sequence_iter;
+                break;
+            }
+        }
+        if (sequence_iter == sequence.cend()) {
+            return sequence_iter;
+        }
+    }
+    return sequence_iter;
+}
+
+std::vector<Item> items_after_prefix(const Sequence& prefix, const Sequence& sequence) {
+
+}

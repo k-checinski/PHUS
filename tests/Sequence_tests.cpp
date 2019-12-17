@@ -77,3 +77,12 @@ TEST_CASE("Items in sequence are counted correctly") {
     Sequence seq = {Transaction{{1, 1}, {2, 1}}, Transaction{{1, 2}}, Transaction{{4, 1}}};
     REQUIRE(count_items(seq) == 4);
 }
+
+TEST_CASE("Prefix end position is designated properly") {
+    Sequence seq = {Transaction{{1, 1}, {2, 1}}, Transaction{{3, 1}},
+                    Transaction{{4, 1}}, Transaction{{2, 1}, {3, 1}}};
+    Sequence prefix = {Transaction{{1, 2}, {2, 1}}, Transaction{{4, 1}}};
+    Sequence prefix2 = {Transaction{{4, 2}}, Transaction{{3, 1}}};
+    REQUIRE(prefix_end_position(prefix, seq)->size() == 2);
+    REQUIRE(prefix_end_position(prefix2, seq) == seq.cend());
+}
