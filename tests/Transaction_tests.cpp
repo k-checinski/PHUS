@@ -14,8 +14,8 @@ TEST_CASE("Filtering transaction works") {
 
 TEST_CASE("Determining partitioning of transaction works") {
     Transaction a = {{1, 2}, {4, 1}, {5, 1}};
-    Transaction b = {{1, 1}, {5, 1}};
-    Transaction c = {{1, 1}, {3, 1}, {4, 1}};
+    PatternElem b = {1, 5};
+    PatternElem c = {1, 3, 4};
     REQUIRE(is_partition(b, a));
     REQUIRE_FALSE(is_partition(c, a));
 }

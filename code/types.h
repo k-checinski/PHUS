@@ -12,6 +12,8 @@
 
 typedef unsigned Item;
 typedef std::map<Item, unsigned> Transaction;
+typedef std::set<Item> PatternElem;
+typedef std::vector<PatternElem> Pattern;
 typedef std::vector<Transaction> Sequence;
 typedef std::map<Item, unsigned> ProfitTable;
 typedef std::vector<Sequence> SDB;

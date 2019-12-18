@@ -39,6 +39,6 @@ unsigned transaction_utility(const Transaction& transaction, const ProfitTable& 
 Transaction filter_transaction(const std::set<Item>& items, const Transaction& transaction);
 
 bool has_items(const Transaction& transaction, const std::set<Item>& items);
-bool is_partition(const Transaction &subtransaction, const Transaction &transaction);
+bool is_partition(const PatternElem& pattern_elem, const Transaction &transaction);
 
 #endif //PHUS_EDAMI_TRANSACTION_H

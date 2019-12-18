@@ -78,5 +78,5 @@ SDB filter_SDB(const std::set<Item>& items, const SDB& sdb, unsigned min_length=
 unsigned count_items(const Sequence& sequence);
 
 std::vector<unsigned> projected_sequences(Item item, const IndexTable& index_table);
-Sequence::const_iterator prefix_end_position(const Sequence& prefix, const Sequence& sequence);
+Sequence::const_iterator prefix_end_position(const Pattern& prefix, const Sequence& sequence);
 #endif //PHUS_EDAMI_SEQUENCE_H

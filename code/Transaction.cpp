@@ -34,9 +34,9 @@ Transaction filter_transaction(const std::set<Item> &items, const Transaction &t
     return new_trans;
 }
 
-bool is_partition(const Transaction &subtransaction, const Transaction &transaction) {
-    for (auto const& item: subtransaction) {
-        if (!has_item(item.first, transaction))
+bool is_partition(const PatternElem &pattern_elem, const Transaction &transaction) {
+    for (auto const& item: pattern_elem) {
+        if (!has_item(item, transaction))
             return false;
     }
     return true;
