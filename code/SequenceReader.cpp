@@ -18,7 +18,7 @@ unsigned SequenceReader::generate_item_count() {
 }
 
 float SequenceReader::generate_profit() {
-    return log_normal_distribution(profit_generator);
+    return ceil(log_normal_distribution(profit_generator));
 }
 
 Transaction SequenceReader::read_transaction(std::stringstream &transaction_data) {
