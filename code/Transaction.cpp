@@ -4,7 +4,7 @@ bool has_item(const Item& item, const Transaction& transaction) {
     return item_count(item, transaction) != 0;
 }
 
-bool has_items(const Transaction &transaction, const std::set<Item> &items) {
+bool has_items(const Transaction &transaction, const PatternElem &items) {
     for (Item item : items) {
         if (!has_item(item, transaction))
             return false;
@@ -40,4 +40,18 @@ bool is_partition(const PatternElem &pattern_elem, const Transaction &transactio
             return false;
     }
     return true;
+}
+
+unsigned pattern_elem_utility(const Transaction &t, const PatternElem &pat, const ProfitTable &profit_table) {
+    unsigned utility = 0;
+    for (Item item : pat) {
+        Transaction::const_iterator it;
+        if ((it = t.find(item)) != t.cend()) {
+            utility += profit_table.at(item) * it->second;
+        }
+        else {
+            return 0;
+        }
+    }
+    return utility;
 }
