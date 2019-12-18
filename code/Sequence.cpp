@@ -95,9 +95,16 @@ Sequence::const_iterator prefix_end_position(const Pattern& prefix, const Sequen
             return sequence_iter;
         }
     }
-    return sequence_iter;
+    return --sequence_iter;
 }
 
-std::vector<Item> items_after_prefix(const Sequence& prefix, const Sequence& sequence) {
-
+std::set<Item> items_between(Sequence::const_iterator first, Sequence::const_iterator last) {
+    std::set<Item> found_items;
+    for (auto it = first; it != last; ++it) {
+        const Transaction& tr = *it;
+        for (const auto& item : tr) {
+            found_items.insert(item.first);
+        }
+    }
+    return found_items;
 }

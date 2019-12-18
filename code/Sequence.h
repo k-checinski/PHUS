@@ -79,4 +79,6 @@ unsigned count_items(const Sequence& sequence);
 
 std::vector<unsigned> projected_sequences(Item item, const IndexTable& index_table);
 Sequence::const_iterator prefix_end_position(const Pattern& prefix, const Sequence& sequence);
+
+std::set<Item> items_between(Sequence::const_iterator first, Sequence::const_iterator last);
 #endif //PHUS_EDAMI_SEQUENCE_H
