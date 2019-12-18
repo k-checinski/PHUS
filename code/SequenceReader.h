@@ -14,7 +14,11 @@ class SequenceReader {
 public:
     SequenceReader();
 
-    std::pair<SDB, ProfitTable> read_dataset(const std::string &file_name);
+    std::pair<SDB, std::set<Item>> read_dataset(const std::string &file_name);
+
+    ProfitTable generate_profit_table(const std::set<Item> &itemSet);
+
+    std::pair<SDB, ProfitTable> prepare_data_for_sequence_mining(const std::string &file_name);
 
 private:
     const unsigned MIN_ITEM_COUNT = 1;

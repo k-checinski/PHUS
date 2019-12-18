@@ -34,7 +34,7 @@ Transaction SequenceReader::read_transaction(std::stringstream &transaction_data
     return transaction;
 }
 
-std::pair<SDB, ProfitTable> SequenceReader::read_dataset(const std::string &file_name) {
+std::pair<SDB, std::set<Item>> SequenceReader::read_dataset(const std::string &file_name) {
     std::ifstream file;
     SDB dataset;
     ProfitTable profitTable;
@@ -53,10 +53,7 @@ std::pair<SDB, ProfitTable> SequenceReader::read_dataset(const std::string &file
                 sequence.push_back(transaction);
 
                 for (const std::pair<Item, unsigned> item : transaction) {
-                    if (processedItems.find(item.first) == processedItems.end()) {
-                        profitTable.insert(std::pair<Item, float>(item.first, generate_profit()));
-                        processedItems.insert(item.first);
-                    }
+                    processedItems.insert(item.first);
                 }
                 transaction_number--;
             }
@@ -66,6 +63,23 @@ std::pair<SDB, ProfitTable> SequenceReader::read_dataset(const std::string &file
         std::cout << "file couldn't be opened";
     }
     file.close();
-    return std::pair<SDB, ProfitTable>(dataset, profitTable);
+    return std::pair<SDB, std::set<Item>>(dataset, processedItems);
 }
+
+ProfitTable SequenceReader::generate_profit_table(const std::set<Item> &itemSet) {
+    ProfitTable profit_table;
+    for (const Item &item : itemSet) {
+        profit_table.insert(std::pair<Item, float>(item, generate_profit()));
+    }
+    return profit_table;
+}
+
+std::pair<SDB, ProfitTable> SequenceReader::prepare_data_for_sequence_mining(const std::string &file_name) {
+    std::pair<SDB, std::set<Item>> dataset = read_dataset(file_name);
+    SDB sequences = dataset.first;
+    ProfitTable profit_table = generate_profit_table(dataset.second);
+    return std::pair<SDB, ProfitTable>(sequences, profit_table);
+}
+
+
 
