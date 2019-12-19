@@ -26,6 +26,15 @@ bool has_item(const Item& item, const Sequence& sequence);
 unsigned utility_of_item(const Item& item, const Sequence& seq, const ProfitTable& profit_table);
 
 /**
+ * Finds maximum utility of given pattern in given sequence.
+ * @param pattern
+ * @param seq
+ * @param profit_table
+ * @return
+ */
+unsigned utility_of_pattern(const Pattern& pattern, const Sequence& seq, const ProfitTable& profit_table);
+
+/**
  * Computes actual sequence utility in sequential database for given item. Sums utility of item for every sequence
  * for every sequence in database.
  * @param item
@@ -80,5 +89,13 @@ unsigned count_items(const Sequence& sequence);
 std::vector<unsigned> projected_sequences(Item item, const IndexTable& index_table);
 Sequence::const_iterator prefix_end_position(const Pattern& prefix, const Sequence& sequence);
 
+/**
+ * Determines set of items between given iterators
+ * @param first iterator on first element to scan
+ * @param last iterator on element behind last element to sZ
+ * @return map of items with their quantities.
+ */
 std::set<Item> items_between(Sequence::const_iterator first, Sequence::const_iterator last);
+
+
 #endif //PHUS_EDAMI_SEQUENCE_H

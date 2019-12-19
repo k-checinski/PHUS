@@ -1,5 +1,7 @@
 #include "Sequence.h"
 
+#include <iostream>
+
 bool has_item(const Item& item, const Sequence& sequence) {
     for (const Transaction & transaction : sequence) {
         if (has_item(item, transaction))
@@ -107,4 +109,38 @@ std::set<Item> items_between(Sequence::const_iterator first, Sequence::const_ite
         }
     }
     return found_items;
+}
+
+unsigned utility_of_pattern(const Pattern &pattern, const Sequence &seq, const ProfitTable &profit_table) {
+    unsigned max_fit_len = 0;
+    std::vector<std::vector<unsigned>> rows;
+    rows.resize(seq.size() + 1);
+    for (auto& row : rows) {
+        row.push_back(0);
+    }
+    for (unsigned i = 1; i < seq.size() + 1; ++i) {
+        for (unsigned j = 1; j <= max_fit_len; ++j) {
+            unsigned non_fit_gain = rows[i - 1][j];
+            unsigned d_fit_gain = pattern_elem_utility(seq[i - 1], pattern[j - 1], profit_table);
+            unsigned fit_gain = d_fit_gain != 0 ? rows[i - 1][j - 1] + d_fit_gain : 0;
+            rows[i].push_back(non_fit_gain > fit_gain ? non_fit_gain : fit_gain);
+        }
+        if (max_fit_len == pattern.size())
+            continue;
+        unsigned d_fit_gain = pattern_elem_utility(seq[i - 1], pattern[max_fit_len], profit_table);
+        if (d_fit_gain != 0) {
+            rows[i].push_back(rows[i - 1][max_fit_len] + d_fit_gain);
+            ++max_fit_len;
+        }
+    }
+    if (max_fit_len != pattern.size())
+        return 0;
+    unsigned max_util = 0;
+    for (auto& row : rows) {
+        if (row.size() == max_fit_len+1) {
+            if (row[max_fit_len] > max_util)
+                max_util = row[max_fit_len];
+        }
+    }
+    return max_util;
 }

@@ -108,3 +108,20 @@ TEST_CASE("items_between for one elements returns items from one element") {
         REQUIRE(found_items.count(item) != 0);
     }
 }
+
+TEST_CASE("Maximal utility of pattern is computed properly") {
+    Sequence seq = {Transaction{{1, 3}, {2, 4}},
+                    Transaction{{3, 1}},
+                    Transaction{{1, 2}},
+                    Transaction{{3, 4}, {4, 3}},
+                    Transaction{{1, 1}, {2, 3}, {3, 2}, {4, 5}},
+                    Transaction{{2, 6}},
+                    Transaction{{1, 2}}};
+    Pattern pat = {PatternElem{1},
+                   PatternElem{3, 4},
+                   PatternElem{2},
+                   PatternElem{1}};
+    ProfitTable profit_table = {{1, 1}, {2, 2}, {3, 3}, {4, 4}};
+    REQUIRE(utility_of_pattern(pat, seq, profit_table)==43);
+
+}
