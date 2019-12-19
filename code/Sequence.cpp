@@ -86,18 +86,23 @@ std::vector<unsigned> projected_sequences(Item item, const IndexTable &index_tab
 
 Sequence::const_iterator prefix_end_position(const Pattern& prefix, const Sequence& sequence) {
     auto sequence_iter = sequence.cbegin();
+    unsigned found = 0;
     for (const PatternElem& transaction: prefix) {
         for (; sequence_iter != sequence.cend(); ++sequence_iter) {
             if (is_partition(transaction, *sequence_iter)) {
                 ++sequence_iter;
+                ++found;
                 break;
             }
         }
-        if (sequence_iter == sequence.cend()) {
-            return sequence_iter;
+        if (sequence_iter == sequence.cend() || prefix.size() == found) {
+            break;
         }
     }
-    return --sequence_iter;
+    if (prefix.size() == found) {
+        return --sequence_iter;
+    }
+    return sequence_iter;
 }
 
 std::set<Item> items_between(Sequence::const_iterator first, Sequence::const_iterator last) {
@@ -107,6 +112,19 @@ std::set<Item> items_between(Sequence::const_iterator first, Sequence::const_ite
         for (const auto& item : tr) {
             found_items.insert(item.first);
         }
+    }
+    return found_items;
+}
+
+std::set<Item> items_in_supersets(Sequence::const_iterator first, Sequence::const_iterator last,
+        const PatternElem& elem) {
+    std::set<Item> found_items;
+    for (auto it = first; it != last; ++it) {
+        const Transaction& tr = *it;
+        if (is_partition(elem, tr))
+            for (const auto& item : tr) {
+                found_items.insert(item.first);
+            }
     }
     return found_items;
 }

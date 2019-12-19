@@ -97,5 +97,7 @@ Sequence::const_iterator prefix_end_position(const Pattern& prefix, const Sequen
  */
 std::set<Item> items_between(Sequence::const_iterator first, Sequence::const_iterator last);
 
+std::set<Item> items_in_supersets(Sequence::const_iterator first, Sequence::const_iterator last,
+                                  const PatternElem& elem);
 
 #endif //PHUS_EDAMI_SEQUENCE_H
