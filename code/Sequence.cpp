@@ -113,34 +113,28 @@ std::set<Item> items_between(Sequence::const_iterator first, Sequence::const_ite
 
 unsigned utility_of_pattern(const Pattern &pattern, const Sequence &seq, const ProfitTable &profit_table) {
     unsigned max_fit_len = 0;
-    std::vector<std::vector<unsigned>> rows;
-    rows.resize(seq.size() + 1);
-    for (auto& row : rows) {
-        row.push_back(0);
-    }
+    unsigned best_utility = 0;
+    std::vector<unsigned> prev_row = {0};
+    std::vector<unsigned> curr_row = {0};
     for (unsigned i = 1; i < seq.size() + 1; ++i) {
         for (unsigned j = 1; j <= max_fit_len; ++j) {
-            unsigned non_fit_gain = rows[i - 1][j];
+            unsigned non_fit_gain = prev_row[j];
             unsigned d_fit_gain = pattern_elem_utility(seq[i - 1], pattern[j - 1], profit_table);
-            unsigned fit_gain = d_fit_gain != 0 ? rows[i - 1][j - 1] + d_fit_gain : 0;
-            rows[i].push_back(non_fit_gain > fit_gain ? non_fit_gain : fit_gain);
+            unsigned fit_gain = d_fit_gain != 0 ? prev_row[j - 1] + d_fit_gain : 0;
+            curr_row.push_back(non_fit_gain > fit_gain ? non_fit_gain : fit_gain);
         }
-        if (max_fit_len == pattern.size())
-            continue;
-        unsigned d_fit_gain = pattern_elem_utility(seq[i - 1], pattern[max_fit_len], profit_table);
-        if (d_fit_gain != 0) {
-            rows[i].push_back(rows[i - 1][max_fit_len] + d_fit_gain);
-            ++max_fit_len;
+        if (max_fit_len != pattern.size()) {
+            unsigned d_fit_gain = pattern_elem_utility(seq[i - 1], pattern[max_fit_len], profit_table);
+            if (d_fit_gain != 0) {
+                curr_row.push_back(prev_row[max_fit_len] + d_fit_gain);
+                ++max_fit_len;
+            }
         }
+        if (best_utility < curr_row[curr_row.size()-1]) {
+            best_utility = curr_row[curr_row.size()-1];
+        }
+        prev_row = curr_row;
+        curr_row = std::vector<unsigned>({0});
     }
-    if (max_fit_len != pattern.size())
-        return 0;
-    unsigned max_util = 0;
-    for (auto& row : rows) {
-        if (row.size() == max_fit_len+1) {
-            if (row[max_fit_len] > max_util)
-                max_util = row[max_fit_len];
-        }
-    }
-    return max_util;
+    return best_utility;
 }
