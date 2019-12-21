@@ -84,6 +84,18 @@ std::vector<unsigned> projected_sequences(Item item, const IndexTable &index_tab
     return sequences_ids;
 }
 
+std::vector<unsigned> projected_sequences(const Pattern &pattern, const std::vector<Sequence> &sequences) {
+    std::vector<unsigned> sequences_ids;
+    unsigned i = 0;
+    for (const Sequence& seq : sequences) {
+        if (prefix_end_position(pattern, seq) != seq.cend()) {
+            sequences_ids.push_back(i);
+        }
+        ++i;
+    }
+    return sequences_ids;
+}
+
 Sequence::const_iterator prefix_end_position(const Pattern& prefix, const Sequence& sequence) {
     auto sequence_iter = sequence.cbegin();
     unsigned found = 0;
@@ -156,3 +168,5 @@ unsigned utility_of_pattern(const Pattern &pattern, const Sequence &seq, const P
     }
     return best_utility;
 }
+
+

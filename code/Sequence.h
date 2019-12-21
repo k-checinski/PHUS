@@ -87,6 +87,9 @@ SDB filter_SDB(const std::set<Item>& items, const SDB& sdb, unsigned min_length=
 unsigned count_items(const Sequence& sequence);
 
 std::vector<unsigned> projected_sequences(Item item, const IndexTable& index_table);
+
+std::vector<unsigned> projected_sequences(const Pattern& pattern, const std::vector<Sequence>& sequences);
+
 Sequence::const_iterator prefix_end_position(const Pattern& prefix, const Sequence& sequence);
 
 /**

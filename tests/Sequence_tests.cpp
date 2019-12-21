@@ -141,3 +141,17 @@ TEST_CASE("Maximal utility of pattern is computed properly") {
     REQUIRE(utility_of_pattern(pat, seq, profit_table)==43);
 
 }
+
+TEST_CASE("projected_sequences for patterns works correctly") {
+    Sequence seq1 = {Transaction{{1, 3}, {2, 2}},
+                     Transaction{{3, 5}, {4, 1}}};
+    Sequence seq2 = {Transaction{{2, 3}}, Transaction{{4,1},{5,2}}};
+    Sequence seq3 = {Transaction{{4, 1}}, Transaction{{2, 2}}};
+    std::vector<Sequence> sequences({seq1, seq2, seq3});
+
+    Pattern pattern = {PatternElem{2}, PatternElem{4}};
+    std::vector<unsigned> correct_ids = std::vector<unsigned>({0, 1});
+    REQUIRE(projected_sequences(pattern, sequences) == correct_ids);
+
+
+}
