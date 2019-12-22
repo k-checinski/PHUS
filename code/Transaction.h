@@ -3,6 +3,7 @@
 
 #include <map>
 #include <set>
+#include <iostream>
 
 #include "types.h"
 
@@ -14,6 +15,7 @@
  */
 bool has_item(const Item& item, const Transaction& transaction);
 
+unsigned pattern_elem_utility(const Transaction& t, const PatternElem& pat, const ProfitTable& profit_table);
 /**
  * Counts items in transaction.
  * @param item
@@ -38,4 +40,9 @@ unsigned transaction_utility(const Transaction& transaction, const ProfitTable& 
  */
 Transaction filter_transaction(const std::set<Item>& items, const Transaction& transaction);
 
+bool has_items(const Transaction& transaction, const PatternElem& items);
+bool is_partition(const PatternElem& pattern_elem, const Transaction &transaction);
+
+std::ostream& operator<<(std::ostream& ost, const Transaction& trans);
+std::ostream& operator<<(std::ostream& ost, const PatternElem& elem);
 #endif //PHUS_EDAMI_TRANSACTION_H

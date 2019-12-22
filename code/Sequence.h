@@ -4,8 +4,10 @@
 #include <list>
 #include <set>
 #include <map>
+#include <iostream>
 
 #include "Transaction.h"
+#include "IndexTable.h"
 
 /**
  * Determines if given item occurs in sequence
@@ -23,6 +25,15 @@ bool has_item(const Item& item, const Sequence& sequence);
  * @return value of utility of item
  */
 unsigned utility_of_item(const Item& item, const Sequence& seq, const ProfitTable& profit_table);
+
+/**
+ * Finds maximum utility of given pattern in given sequence.
+ * @param pattern
+ * @param seq
+ * @param profit_table
+ * @return
+ */
+unsigned utility_of_pattern(const Pattern& pattern, const Sequence& seq, const ProfitTable& profit_table);
 
 /**
  * Computes actual sequence utility in sequential database for given item. Sums utility of item for every sequence
@@ -69,10 +80,34 @@ Sequence filter_sequence(const std::set<Item>& items, const Sequence& sequence);
  */
 SDB filter_SDB(const std::set<Item>& items, const SDB& sdb, unsigned min_length=0);
 
+SDB filter_SDB(const SDB& sdb, unsigned min_length=0);
+
 /**
  * Counts items in every transaction in sequence. E.g. for <{a(1), b(2)}, a(4), c(1)> returns 4.
  * @param sequence
  * @return number of items in sequence
  */
 unsigned count_items(const Sequence& sequence);
+
+std::vector<unsigned> projected_sequences(Item item, const IndexTable& index_table);
+
+std::vector<Sequence> projected_sequences(const Pattern& pattern, const std::vector<Sequence>& sequences);
+
+Sequence::const_iterator prefix_end_position(const Pattern& prefix, const Sequence& sequence);
+
+/**
+ * Determines set of items between given iterators
+ * @param first iterator on first element to scan
+ * @param last iterator on element behind last element to sZ
+ * @return map of items with their quantities.
+ */
+std::set<Item> items_between(Sequence::const_iterator first, Sequence::const_iterator last);
+
+std::set<Item> items_in_supersets(Sequence::const_iterator first, Sequence::const_iterator last,
+                                  const PatternElem& elem);
+
+std::set<Item> items_between(Pattern::const_iterator first, Pattern::const_iterator last);
+
+std::ostream& operator<<(std::ostream& ost, const Sequence& seq);
+std::ostream& operator<<(std::ostream& ost, const Pattern& pat);
 #endif //PHUS_EDAMI_SEQUENCE_H
