@@ -160,7 +160,37 @@ TEST_CASE("projected_sequences for patterns works correctly") {
     Pattern pattern = {PatternElem{2}, PatternElem{4}};
     std::vector<Sequence> proj_seq = projected_sequences(pattern, sequences);
     REQUIRE(proj_seq.size() == 3);
-    REQUIRE(proj_seq[0].size() == 1);
-    REQUIRE(proj_seq[1].size() == 1);
-    REQUIRE(proj_seq[2].size() == 2);
+    REQUIRE(proj_seq[0].size() == 2);
+    REQUIRE(proj_seq[1].size() == 2);
+    REQUIRE(proj_seq[2].size() == 3);
+}
+
+TEST_CASE("Transaction projection works if element is partition of transaction") {
+    Transaction transaction = {{1, 4}, {2, 5}, {3, 1}};
+    PatternElem elem = {1, 3};
+    Transaction projection = transaction_projection(elem, transaction);
+    REQUIRE(projection.size() == 2);
+    REQUIRE(projection[1] == 4);
+    REQUIRE(projection[3] == 1);
+}
+
+TEST_CASE("Transaction projection returns empty transaction if element is not partition of the transaction") {
+    Transaction transaction = {{1, 4}, {2, 5}, {3, 1}};
+    PatternElem elem = {1, 4};
+    Transaction projection = transaction_projection(elem, transaction);
+    REQUIRE(projection.empty());
+}
+
+TEST_CASE("Sequence projection works") {
+    Sequence seq = {Transaction{{2, 1}}, Transaction{{1, 2}, {3, 1}},
+                    Transaction{{4, 1}, {5, 1}}, Transaction{{6, 1}},
+                    Transaction{{7, 1}, {1, 1}}};
+    Pattern pat = {{2}, {4}};
+    Sequence projection = sequence_projection(pat, seq);
+    REQUIRE(projection.size() == 4);
+    REQUIRE(projection[0] == Transaction{{2, 1}});
+    REQUIRE(projection[1] == Transaction{{4, 1}, {5, 1}});
+    REQUIRE(projection[2] == Transaction{{6, 1}});
+    REQUIRE(projection[3] == Transaction{{7, 1}, {1, 1}});
+    std::cout<<projection;
 }

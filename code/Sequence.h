@@ -110,4 +110,9 @@ std::set<Item> items_between(Pattern::const_iterator first, Pattern::const_itera
 
 std::ostream& operator<<(std::ostream& ost, const Sequence& seq);
 std::ostream& operator<<(std::ostream& ost, const Pattern& pat);
+
+Transaction transaction_projection(const PatternElem& elem, const Transaction& transaction);
+Sequence sequence_projection(const Pattern& prefix, const Sequence& sequence);
+
+
 #endif //PHUS_EDAMI_SEQUENCE_H
