@@ -46,7 +46,7 @@ std::vector<Pattern> phus(const SDB &sequences, const ProfitTable &profit_table,
         Item item = *(pattern[0].begin());
         std::vector<Sequence> sdp;
         for (auto const& index : index_table.at(item)) {
-            sdp.push_back(sequences.at(index.sequence_id));
+            sdp.push_back(filtered_sdb.at(index.sequence_id));
         }
         std::vector<Pattern> hus_prime = find_hus(pattern, sdp, r, profit_table, util_threshold);
         hus.insert(hus.end(), hus_prime.begin(), hus_prime.end());

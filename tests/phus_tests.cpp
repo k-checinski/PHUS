@@ -4,20 +4,18 @@
 
 TEST_CASE("PHUS works") {
     ProfitTable profit_table = {{1, 3}, {2, 10}, {3, 1}, {4, 6}, {5, 5}, {6, 2}};
-    Sequence proj_seq1 = {Transaction{{1, 1}}, Transaction{{1, 2}},
-                          Transaction {{5, 1}}, Transaction{{6, 2}}};
-    Sequence proj_seq2 = {Transaction{{1, 1}}, Transaction{{2, 1}, {3, 15}},
-                          Transaction{{3, 3}}};
-    Sequence proj_seq3 = {Transaction{{1, 3}}, Transaction {{1, 2}, {3, 8}},
-                          Transaction {{5, 2}}};
-    Sequence proj_seq4 = {Transaction{{1, 3}, {2, 2}}, Transaction{{3, 2}},
-                          Transaction{{5, 2}}, Transaction{{6, 3}}};
-    Sequence proj_seq5 = {Transaction{{1, 3}}, Transaction{{6, 1}}};
-    Sequence proj_seq6 = {Transaction{{1, 2}}, Transaction{{3, 4}},
-                          Transaction{{5, 2}}};
-    SDB sdb = {proj_seq1, proj_seq2, proj_seq3, proj_seq4, proj_seq5, proj_seq6};
+    Sequence seq1 = {{{1, 1}}, {{1, 2}, {4, 1}}, {{5, 1}}, {{6, 2}}};
+    Sequence seq2 = {{{1, 1}}, {{2, 1}, {3, 15}}, {{3, 3}}};
+    Sequence seq3 = {{{5, 3}}, {{3, 2}}, {{5, 1}}};
+    Sequence seq4 = {{{2, 2}, {3, 9}}, {{3, 5}}};
+    Sequence seq5 = {{{1, 3}}, {{1, 2}, {3, 8}}, {{5, 2}}};
+    Sequence seq6 = {{{3, 7}}, {{2, 1}}, {{6, 3}}};
+    Sequence seq7 = {{{3, 7}}, {{4, 1}}};
+    Sequence seq8 = {{{1, 3}, {2, 2}}, {{3, 2}}, {{5, 2}}, {{6, 3}}};
+    Sequence seq9 = {{{1, 3}}, {{4, 1}}, {{6, 1}}};
+    Sequence seq10 = {{{1, 2}}, {{3, 4}}, {{5, 2}}};
+    SDB sdb = {seq1, seq2, seq3, seq4, seq5, seq6, seq7, seq8, seq9, seq10};
     unsigned threshold = 65;
-    Pattern prefix = {PatternElem {1}};
     std::vector<Pattern> found_patterns = phus(sdb, profit_table, threshold);
     std::cout<<"RESULT\n";
     for (const auto& pat: found_patterns)
