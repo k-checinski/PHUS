@@ -80,6 +80,8 @@ Sequence filter_sequence(const std::set<Item>& items, const Sequence& sequence);
  */
 SDB filter_SDB(const std::set<Item>& items, const SDB& sdb, unsigned min_length=0);
 
+SDB filter_SDB(const SDB& sdb, unsigned min_length=0);
+
 /**
  * Counts items in every transaction in sequence. E.g. for <{a(1), b(2)}, a(4), c(1)> returns 4.
  * @param sequence

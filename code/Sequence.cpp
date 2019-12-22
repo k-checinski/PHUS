@@ -68,6 +68,17 @@ SDB filter_SDB(const std::set<Item>& items, const SDB& sdb, unsigned min_length)
     return new_sdb;
 }
 
+SDB filter_SDB(const SDB &sdb, unsigned int min_length) {
+    SDB new_sdb;
+    min_length = min_length > 1 ? min_length : 1;
+    for (const Sequence& sequence : sdb) {
+        if (count_items(sequence) >= min_length) {
+            new_sdb.push_back(sequence);
+        }
+    }
+    return new_sdb;
+}
+
 unsigned count_items(const Sequence &sequence) {
     unsigned items = 0;
     for (const Transaction& transaction : sequence) {
@@ -173,24 +184,20 @@ std::ostream &operator<<(std::ostream &ost, const Sequence &seq) {
     auto it_end = seq.cend();
     --it_end;
     for (auto it = seq.cbegin(); it != it_end; ++it) {
-        if ((*it).size() > 1) {
+        if ((*it).size() > 1)
             ost << "{";
-        }
         ost << (*it);
-        if ((*it).size() > 1) {
+        if ((*it).size() > 1)
             ost << "}";
-        }
-        ost<<", ";
+        ost << ", ";
     }
     auto it = seq.crbegin();
-    if ((*it).size() > 1) {
+    if ((*it).size() > 1)
         ost << "{";
-    }
     ost << (*it);
-    if ((*it).size() > 1) {
+    if ((*it).size() > 1)
         ost << "}";
-    }
-    ost<<">\n";
+    ost << ">\n";
     return ost;
 }
 

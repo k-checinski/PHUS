@@ -72,6 +72,13 @@ TEST_CASE("Filtering SDB works") {
     REQUIRE(filtered_sdb2.size() == 1);
 }
 
+TEST_CASE("Filtering SDB based on length works") {
+    Sequence seq1 = {Transaction{{1, 4}, {2, 3}}, Transaction{{1, 5}}}; // 3
+    Sequence seq2 = {Transaction{{3, 1}}, Transaction{{2, 1}}}; // 2
+    Sequence seq3 = {Transaction{{1, 1}}}; // 1
+    SDB sdb = {seq1, seq2, seq3};
+    REQUIRE(filter_SDB(sdb, 2).size() == 2);
+}
 
 TEST_CASE("Items in sequence are counted correctly") {
     Sequence seq = {Transaction{{1, 1}, {2, 1}}, Transaction{{1, 2}}, Transaction{{4, 1}}};
