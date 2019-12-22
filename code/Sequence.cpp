@@ -98,9 +98,9 @@ std::vector<unsigned> projected_sequences(Item item, const IndexTable &index_tab
 std::vector<Sequence> projected_sequences(const Pattern &pattern, const std::vector<Sequence> &sequences) {
     std::vector<Sequence> proj_sequences;
     for (const Sequence& seq : sequences) {
-        auto it = prefix_end_position(pattern, seq);
-        if (it != seq.cend()) {
-            proj_sequences.emplace_back(it, seq.end());
+        Sequence proj_seq = sequence_projection(pattern, seq);
+        if (!proj_seq.empty()) {
+            proj_sequences.push_back(std::move(proj_seq));
         }
     }
     return proj_sequences;
@@ -234,6 +234,47 @@ std::set<Item> items_between(Pattern::const_iterator first, Pattern::const_itera
         }
     }
     return found_items;
+}
+
+Sequence sequence_projection(const Pattern &prefix, const Sequence &sequence) {
+    Sequence projection;
+    auto sequence_iter = sequence.cbegin();
+    unsigned found = 0;
+    for (const PatternElem& elem: prefix) {
+        for (; sequence_iter != sequence.cend(); ++sequence_iter) {
+            Transaction trans_proj = transaction_projection(elem, *sequence_iter);
+            if (!trans_proj.empty()) {
+                ++sequence_iter;
+                ++found;
+                projection.push_back(trans_proj);
+                break;
+            }
+        }
+        if (sequence_iter == sequence.cend() || prefix.size() == found) {
+            break;
+        }
+    }
+    if (prefix.size() != found) {
+        return Sequence();
+    }
+    for (const auto& item : *(sequence_iter-1)) {
+        projection.back().insert(item);
+    }
+    for (;sequence_iter != sequence.cend(); ++sequence_iter) {
+        projection.push_back(*sequence_iter);
+    }
+    return projection;
+}
+
+Transaction transaction_projection(const PatternElem &elem, const Transaction &transaction) {
+    Transaction projection;
+    for (Item item: elem) {
+        if (transaction.count(item) != 0)
+            projection[item] = transaction.at(item);
+        else
+            return Transaction();
+    }
+    return projection;
 }
 
 
