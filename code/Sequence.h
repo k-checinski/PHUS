@@ -4,6 +4,7 @@
 #include <list>
 #include <set>
 #include <map>
+#include <iostream>
 
 #include "Transaction.h"
 #include "IndexTable.h"
@@ -88,7 +89,7 @@ unsigned count_items(const Sequence& sequence);
 
 std::vector<unsigned> projected_sequences(Item item, const IndexTable& index_table);
 
-std::vector<unsigned> projected_sequences(const Pattern& pattern, const std::vector<Sequence>& sequences);
+std::vector<Sequence> projected_sequences(const Pattern& pattern, const std::vector<Sequence>& sequences);
 
 Sequence::const_iterator prefix_end_position(const Pattern& prefix, const Sequence& sequence);
 
@@ -103,4 +104,5 @@ std::set<Item> items_between(Sequence::const_iterator first, Sequence::const_ite
 std::set<Item> items_in_supersets(Sequence::const_iterator first, Sequence::const_iterator last,
                                   const PatternElem& elem);
 
+std::ostream& operator<<(std::ostream& ost, const Sequence& seq);
 #endif //PHUS_EDAMI_SEQUENCE_H

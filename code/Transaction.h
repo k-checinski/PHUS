@@ -3,6 +3,7 @@
 
 #include <map>
 #include <set>
+#include <iostream>
 
 #include "types.h"
 
@@ -41,5 +42,7 @@ Transaction filter_transaction(const std::set<Item>& items, const Transaction& t
 
 bool has_items(const Transaction& transaction, const PatternElem& items);
 bool is_partition(const PatternElem& pattern_elem, const Transaction &transaction);
+
+std::ostream& operator<<(std::ostream& ost, const Transaction& trans);
 
 #endif //PHUS_EDAMI_TRANSACTION_H

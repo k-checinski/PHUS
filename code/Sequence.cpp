@@ -84,16 +84,15 @@ std::vector<unsigned> projected_sequences(Item item, const IndexTable &index_tab
     return sequences_ids;
 }
 
-std::vector<unsigned> projected_sequences(const Pattern &pattern, const std::vector<Sequence> &sequences) {
-    std::vector<unsigned> sequences_ids;
-    unsigned i = 0;
+std::vector<Sequence> projected_sequences(const Pattern &pattern, const std::vector<Sequence> &sequences) {
+    std::vector<Sequence> proj_sequences;
     for (const Sequence& seq : sequences) {
-        if (prefix_end_position(pattern, seq) != seq.cend()) {
-            sequences_ids.push_back(i);
+        auto it = prefix_end_position(pattern, seq);
+        if (it != seq.cend()) {
+            proj_sequences.emplace_back(it, seq.end());
         }
-        ++i;
     }
-    return sequences_ids;
+    return proj_sequences;
 }
 
 Sequence::const_iterator prefix_end_position(const Pattern& prefix, const Sequence& sequence) {
@@ -167,6 +166,32 @@ unsigned utility_of_pattern(const Pattern &pattern, const Sequence &seq, const P
         curr_row = std::vector<unsigned>({0});
     }
     return best_utility;
+}
+
+std::ostream &operator<<(std::ostream &ost, const Sequence &seq) {
+    ost<<"<";
+    auto it_end = seq.cend();
+    --it_end;
+    for (auto it = seq.cbegin(); it != it_end; ++it) {
+        if ((*it).size() > 1) {
+            ost << "{";
+        }
+        ost << (*it);
+        if ((*it).size() > 1) {
+            ost << "}";
+        }
+        ost<<", ";
+    }
+    auto it = seq.crbegin();
+    if ((*it).size() > 1) {
+        ost << "{";
+    }
+    ost << (*it);
+    if ((*it).size() > 1) {
+        ost << "}";
+    }
+    ost<<">\n";
+    return ost;
 }
 
 

@@ -55,3 +55,25 @@ unsigned pattern_elem_utility(const Transaction &t, const PatternElem &pat, cons
     }
     return utility;
 }
+
+std::ostream &operator<<(std::ostream &ost, const Transaction &trans) {
+    auto it_end = trans.cend();
+    --it_end;
+    for (auto it = trans.cbegin(); it != it_end; ++it) {
+        ost << (*it).first << "(" << (*it).second << "), ";
+    }
+    auto it_last = trans.crbegin();
+    ost << (*it_last).first << "(" << (*it_last).second << ")" ;
+    return ost;
+}
+
+std::ostream &operator<<(std::ostream &ost, const PatternElem &elem) {
+    auto it_end = elem.cend();
+    --it_end;
+    for (auto it = elem.cbegin(); it != it_end; ++it) {
+        ost << (*it) << ", ";
+    }
+    auto it_last = elem.crbegin();
+    ost << (*it_last);
+    return ost;
+}

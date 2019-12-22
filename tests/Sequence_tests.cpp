@@ -147,11 +147,13 @@ TEST_CASE("projected_sequences for patterns works correctly") {
                      Transaction{{3, 5}, {4, 1}}};
     Sequence seq2 = {Transaction{{2, 3}}, Transaction{{4,1},{5,2}}};
     Sequence seq3 = {Transaction{{4, 1}}, Transaction{{2, 2}}};
-    std::vector<Sequence> sequences({seq1, seq2, seq3});
-
+    Sequence seq4 = {Transaction{{2, 1}},
+                     Transaction{{4, 1}, {5, 1}}, Transaction{{6, 1}}};
+    std::vector<Sequence> sequences({seq1, seq2, seq3, seq4});
     Pattern pattern = {PatternElem{2}, PatternElem{4}};
-    std::vector<unsigned> correct_ids = std::vector<unsigned>({0, 1});
-    REQUIRE(projected_sequences(pattern, sequences) == correct_ids);
-
-
+    std::vector<Sequence> proj_seq = projected_sequences(pattern, sequences);
+    REQUIRE(proj_seq.size() == 3);
+    REQUIRE(proj_seq[0].size() == 1);
+    REQUIRE(proj_seq[1].size() == 1);
+    REQUIRE(proj_seq[2].size() == 2);
 }
