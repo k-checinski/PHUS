@@ -3,6 +3,8 @@
 
 std::vector<Pattern> find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsigned r,
                               const ProfitTable &profit_table, unsigned util_threshold) {
+    std::cout<<"Prefix: "<<prefix<<"\n";
+    std::cout<<"r = "<<r<<'\n';
     /// PSTEP 1
     TSTable ts_table;
     /// PSTEP 2
@@ -17,6 +19,7 @@ std::vector<Pattern> find_hus(const Pattern &prefix, const std::vector<Sequence>
             update_table(ts_table, pattern, sequence_util, mu);
         }
     }
+    std::cout<<ts_table<<"\n";
     /// PSTEP 3 / 4
     std::vector<Pattern> hsuub;
     std::vector<Pattern> hus;
@@ -24,19 +27,39 @@ std::vector<Pattern> find_hus(const Pattern &prefix, const std::vector<Sequence>
     for (const TSTuple& tuple : ts_table) {
         if (tuple.suub >= util_threshold) {
             hsuub.push_back(tuple.pat);
+            for (auto const& elem: tuple.pat) {
+                for (Item item : elem) {
+                    hsuub_items.insert(item);
+                }
+            }
         }
         if (tuple.asu >= util_threshold) {
             hus.push_back(tuple.pat);
         }
     }
+    ///DEBUG
+    std::cout<<"HUS"<<std::endl;
+    for (const auto& seq : hus) {
+        std::cout<<seq<<"\n";
+    }
+    std::cout<<"\nHSUUB"<<std::endl;
+    for (const auto& seq : hsuub) {
+        std::cout<<seq<<"\n";
+    }
     /// PSTEP 5
+    std::cout<<"\nfiltered_projected_sequences\n";
     std::vector<Sequence> filtered_projected_sequences = filter_SDB(hsuub_items, projected_seq, r + 2);
+    for (const auto& seq : filtered_projected_sequences) {
+        std::cout<<seq<<"\n";
+    }
     /// PSTEP 6
     for (const Pattern& pat : hsuub) {
-        projected_sequences(pat, filtered_projected_sequences);
+        std::vector<Sequence> sdp_prime = filter_SDB(projected_sequences(pat, filtered_projected_sequences), r+2);
+        if (!sdp_prime.empty()) {
+            std::vector<Pattern> hus_prime = find_hus(pat, sdp_prime, r + 1, profit_table, util_threshold);
+            hus.insert(hus.end(), hus_prime.begin(), hus_prime.end());
+        }
     }
-//    std::vector<Sequence> projected_sequences_prime =
-
     return hus;
 }
 
@@ -78,4 +101,11 @@ void update_table(TSTable &table, const Pattern &pattern, unsigned su, unsigned 
         }
     }
     table.push_back(TSTuple(pattern, su, mu));
+}
+
+std::ostream &operator<<(std::ostream &ost, const TSTable &table) {
+    for (const auto& tuple : table) {
+        ost<<tuple.pat<<"\tasu = "<<tuple.asu<<"\tsuub = "<<tuple.suub<<'\n';
+    }
+    return ost;
 }

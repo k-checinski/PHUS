@@ -197,8 +197,43 @@ std::ostream &operator<<(std::ostream &ost, const Sequence &seq) {
     ost << (*it);
     if ((*it).size() > 1)
         ost << "}";
-    ost << ">\n";
+    ost<<">";
     return ost;
+}
+
+std::ostream &operator<<(std::ostream &ost, const Pattern &pat) {
+    ost<<"<";
+    if (pat.empty())
+        return ost;
+    auto it_end = pat.cend();
+    --it_end;
+    for (auto it = pat.cbegin(); it != it_end; ++it) {
+        if ((*it).size() > 1)
+            ost << "{";
+        ost << (*it);
+        if ((*it).size() > 1)
+            ost << "}";
+        ost << ", ";
+    }
+    auto it = pat.crbegin();
+    if ((*it).size() > 1)
+        ost << "{";
+    ost << (*it);
+    if ((*it).size() > 1)
+        ost << "}";
+    ost<<">";
+    return ost;
+}
+
+std::set<Item> items_between(Pattern::const_iterator first, Pattern::const_iterator last) {
+    std::set<Item> found_items;
+    for (auto it = first; it != last; ++it) {
+        const PatternElem & tr = *it;
+        for (const auto& item : tr) {
+            found_items.insert(item);
+        }
+    }
+    return found_items;
 }
 
 

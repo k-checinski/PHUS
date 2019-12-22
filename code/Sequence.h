@@ -106,5 +106,8 @@ std::set<Item> items_between(Sequence::const_iterator first, Sequence::const_ite
 std::set<Item> items_in_supersets(Sequence::const_iterator first, Sequence::const_iterator last,
                                   const PatternElem& elem);
 
+std::set<Item> items_between(Pattern::const_iterator first, Pattern::const_iterator last);
+
 std::ostream& operator<<(std::ostream& ost, const Sequence& seq);
+std::ostream& operator<<(std::ostream& ost, const Pattern& pat);
 #endif //PHUS_EDAMI_SEQUENCE_H
