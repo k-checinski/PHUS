@@ -45,5 +45,11 @@ TEST_CASE("find_hus works for example from paper") {
     unsigned threshold = 65;
     unsigned r = 1;
     Pattern prefix = {PatternElem {1}};
-    find_hus(prefix, sdb, r, profit_table, threshold);
+    std::vector<Pattern> found_patterns = find_hus(prefix, sdb, r, profit_table, threshold);
+    std::cout<<"RESULT\n";
+    for (const auto& pat: found_patterns)
+        std::cout<<pat<<"\n";
+    REQUIRE(found_patterns.size() == 2);
+    REQUIRE(found_patterns[0] == Pattern{{1}, {5}});
+    REQUIRE(found_patterns[1] == Pattern{{1}, {3}, {5}});
 }

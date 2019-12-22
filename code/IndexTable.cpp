@@ -14,9 +14,9 @@ IndexTable create_index_table(const SDB &sdb, const std::set<Item>& items) {
                 }
             }
             ++seq_pos;
-            current_seq.clear();
         }
         ++seq_id;
+        current_seq.clear();
     }
     return table;
 }
