@@ -6,6 +6,7 @@
 #define PHUS_EDAMI_FINDING_HUS_H
 
 #include <utility>
+#include <chrono>
 
 #include "Sequence.h"
 
