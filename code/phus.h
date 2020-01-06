@@ -6,6 +6,7 @@
 #define PHUS_EDAMI_PHUS_H
 
 #include "finding_hus.h"
+#include <chrono>
 
 struct ItemTableTuple {
     unsigned asu = 0;

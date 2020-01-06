@@ -6,6 +6,7 @@
 #define PHUS_EDAMI_FINDING_HUS_H
 
 #include <utility>
+#include <chrono>
 
 #include "Sequence.h"
 
@@ -21,13 +22,16 @@ struct TSTuple {
 
 typedef std::vector<TSTuple> TSTable;
 
-void update_table(TSTable& table, const Pattern& pattern, unsigned su, unsigned mu);
+void update_table(TSTable &table, const Pattern &pattern, unsigned su, unsigned mu);
 
-std::vector<Pattern> generate_prefix_patterns(const Sequence& seq, const Pattern& prefix);
-std::vector<Pattern> find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_sequences, unsigned r,
-                               const ProfitTable &profit_table, unsigned util_threshold);
+std::vector<Pattern> generate_prefix_patterns(const Sequence &seq, const Pattern &prefix);
 
-std::ostream& operator<<(std::ostream& ost, const TSTable& table);
+std::pair<std::vector<Pattern>, unsigned int> find_hus(const Pattern &prefix,
+                                                       const std::vector<Sequence> &projected_sequences, unsigned r,
+                                                       const ProfitTable &profit_table,
+                                                       unsigned util_threshold, unsigned hus_counter);
+
+std::ostream &operator<<(std::ostream &ost, const TSTable &table);
 
 
 #endif //PHUS_EDAMI_FINDING_HUS_H
