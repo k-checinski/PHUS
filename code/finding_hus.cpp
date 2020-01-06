@@ -1,8 +1,12 @@
 #include "finding_hus.h"
 
 
-std::vector<Pattern> find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsigned r,
-                              const ProfitTable &profit_table, unsigned util_threshold) {
+std::pair<std::vector<Pattern>, unsigned int>
+find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsigned r,
+         const ProfitTable &profit_table, unsigned util_threshold, unsigned hus_counter) {
+
+    std::chrono::steady_clock::time_point hus_start = std::chrono::steady_clock::now();
+    hus_counter++;
     std::cout << "Prefix: " << prefix << "\n";
     std::cout << "r = " << r << '\n';
     /// PSTEP 1
@@ -24,7 +28,7 @@ std::vector<Pattern> find_hus(const Pattern &prefix, const std::vector<Sequence>
     }
 
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    std::cout << "generate all prefix_patterns for prefix: " << prefix << "took "
+    std::cout << "[TIME] generation of all prefix_patterns for prefix: " << prefix << " took "
               << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
 
     std::cout << ts_table << "\n";
@@ -64,11 +68,23 @@ std::vector<Pattern> find_hus(const Pattern &prefix, const std::vector<Sequence>
     for (const Pattern &pat : hsuub) {
         std::vector<Sequence> sdp_prime = filter_SDB(projected_sequences(pat, filtered_projected_sequences), r + 2);
         if (!sdp_prime.empty()) {
-            std::vector<Pattern> hus_prime = find_hus(pat, sdp_prime, r + 1, profit_table, util_threshold);
+            std::vector<Pattern> hus_prime = find_hus(pat, sdp_prime, r + 1, profit_table, util_threshold, hus_counter).first;
             hus.insert(hus.end(), hus_prime.begin(), hus_prime.end());
         }
     }
-    return hus;
+
+    std::chrono::steady_clock::time_point hus_end = std::chrono::steady_clock::now();
+    std::cout << "[TIME] hus duration for pattern: " << prefix << " and projected sequences: ";
+
+    for (const auto &seq : projected_seq) {
+        std::cout << seq << " ,";
+    }
+
+    std::cout << " took: " << std::chrono::duration_cast<std::chrono::microseconds>(
+            hus_end - hus_start).count() << "[µs]" << std::endl;
+    std::cout << std::endl;
+
+    return std::pair<std::vector<Pattern>,unsigned>(hus, hus_counter);
 }
 
 

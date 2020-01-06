@@ -1,7 +1,7 @@
 //
 // Created by jedikarix on 22.12.2019.
 //
-
+#include <iostream>
 #include "phus.h"
 
 std::vector<Pattern> phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_threshold) {
@@ -48,30 +48,30 @@ std::vector<Pattern> phus(const SDB &sequences, const ProfitTable &profit_table,
     /// STEP 7
     IndexTable index_table = create_index_table(filtered_sdb, promising_items);
     std::chrono::steady_clock::time_point initial_phase_end = std::chrono::steady_clock::now();
-    std::cout << "initial phase duration: "
+    std::cout << "[TIME] initial phase duration: "
               << std::chrono::duration_cast<std::chrono::microseconds>(initial_phase_end - initial_phase_start).count()
               << "[µs]" << std::endl;
     /// STEP 8
 
+    unsigned hus_counter = 0;
     for (auto const &pattern : hsuub) {
-        std::chrono::steady_clock::time_point external_hus_start = std::chrono::steady_clock::now();
+
         Item item = *(pattern[0].begin());
         std::vector<Sequence> sdp;
         for (auto const &index : index_table.at(item)) {
             sdp.push_back(filtered_sdb.at(index.sequence_id));
         }
-        std::vector<Pattern> hus_prime = find_hus(pattern, sdp, r, profit_table, util_threshold);
+        auto found_hus = find_hus(pattern, sdp, r, profit_table, util_threshold, hus_counter);
+        std::vector<Pattern> hus_prime = found_hus.first;
+        hus_counter += found_hus.second;
         hus.insert(hus.end(), hus_prime.begin(), hus_prime.end());
-        std::chrono::steady_clock::time_point external_hus_end = std::chrono::steady_clock::now();
-        std::cout << "hus duration for pattern: " << pattern << ": "
-                  << std::chrono::duration_cast<std::chrono::microseconds>(
-                          external_hus_end - external_hus_start).count() << "[µs]" << std::endl;
     }
 
     std::chrono::steady_clock::time_point phus_end = std::chrono::steady_clock::now();
-    std::cout << "algorithm duration: "
-              << std::chrono::duration_cast<std::chrono::microseconds>(phus_end - phus_start).count() << "[µs]"
+    std::cout << "[TIME] algorithm duration: "
+              << std::chrono::duration_cast<std::chrono::seconds>(phus_end - phus_start).count() << "[s]"
               << std::endl;
+    std:: cout << "number of find_hus calls: " << hus_counter << std::endl;
     return hus;
 }
 
