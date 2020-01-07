@@ -1,21 +1,18 @@
 #include "finding_hus.h"
 
-
 std::pair<std::vector<Pattern>, unsigned int>
 find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsigned r, const ProfitTable &profit_table,
          unsigned util_threshold, unsigned hus_counter, unsigned max_len) {
+
     if (r > max_len && max_len != 0) {
         return std::pair<std::vector<Pattern>,unsigned>(std::vector<Pattern>(), hus_counter);
     }
-    std::chrono::steady_clock::time_point hus_start = std::chrono::steady_clock::now();
     hus_counter++;
     std::cout << "Prefix: " << prefix << "\n";
     std::cout << "r = " << r << '\n';
     /// PSTEP 1
     TSTable ts_table;
     /// PSTEP 2
-
-    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
     for (const Sequence &seq_y : projected_seq) {
         unsigned sequence_util = sequence_utility(seq_y, profit_table);
@@ -28,10 +25,6 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
             update_table(ts_table, pattern, sequence_util, mu);
         }
     }
-
-    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    std::cout << "[TIME] generation of all prefix_patterns for prefix: " << prefix << " took "
-              << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
 
     std::cout << ts_table << "\n";
     /// PSTEP 3 / 4
@@ -75,18 +68,6 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
             hus.insert(hus.end(), hus_prime.begin(), hus_prime.end());
         }
     }
-
-    std::chrono::steady_clock::time_point hus_end = std::chrono::steady_clock::now();
-    std::cout << "[TIME] hus duration for pattern: " << prefix << " and projected sequences: ";
-
-    for (const auto &seq : projected_seq) {
-        std::cout << seq << " ,";
-    }
-
-    std::cout << " took: " << std::chrono::duration_cast<std::chrono::microseconds>(
-            hus_end - hus_start).count() << "[µs]" << std::endl;
-    std::cout << std::endl;
-
     return std::pair<std::vector<Pattern>,unsigned>(hus, hus_counter);
 }
 

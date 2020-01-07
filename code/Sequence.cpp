@@ -57,8 +57,7 @@ Sequence filter_sequence(const std::set<Item> &items, const Sequence &sequence) 
     return new_sequence;
 }
 
-SDB filter_SDB(const std::set<Item> &items, const SDB &sdb, unsigned min_length) {
-    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+SDB filter_SDB(const std::set<Item>& items, const SDB& sdb, unsigned min_length) {
     SDB new_sdb;
     min_length = min_length > 1 ? min_length : 1;
     for (const Sequence &sequence : sdb) {
@@ -67,15 +66,6 @@ SDB filter_SDB(const std::set<Item> &items, const SDB &sdb, unsigned min_length)
             new_sdb.push_back(filtered_sequence);
         }
     }
-
-    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-
-    if (!items.empty()) {
-        std::cout << "[TIME] filtering sequences dataset with promising items: " << items << " and minimum length: "
-                  << min_length << "  took "
-                  << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
-    }
-
     return new_sdb;
 }
 
