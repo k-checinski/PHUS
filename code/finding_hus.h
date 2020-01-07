@@ -26,10 +26,9 @@ void update_table(TSTable &table, const Pattern &pattern, unsigned su, unsigned 
 
 std::vector<Pattern> generate_prefix_patterns(const Sequence &seq, const Pattern &prefix);
 
-std::pair<std::vector<Pattern>, unsigned int> find_hus(const Pattern &prefix,
-                                                       const std::vector<Sequence> &projected_sequences, unsigned r,
-                                                       const ProfitTable &profit_table,
-                                                       unsigned util_threshold, unsigned hus_counter);
+std::pair<std::vector<Pattern>, unsigned int>
+find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsigned r, const ProfitTable &profit_table,
+         unsigned util_threshold, unsigned hus_counter, unsigned max_len);
 
 std::ostream &operator<<(std::ostream &ost, const TSTable &table);
 

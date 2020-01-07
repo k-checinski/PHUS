@@ -2,9 +2,11 @@
 
 
 std::pair<std::vector<Pattern>, unsigned int>
-find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsigned r,
-         const ProfitTable &profit_table, unsigned util_threshold, unsigned hus_counter) {
-
+find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsigned r, const ProfitTable &profit_table,
+         unsigned util_threshold, unsigned hus_counter, unsigned max_len) {
+    if (r > max_len && max_len != 0) {
+        return std::pair<std::vector<Pattern>,unsigned>(std::vector<Pattern>(), hus_counter);
+    }
     std::chrono::steady_clock::time_point hus_start = std::chrono::steady_clock::now();
     hus_counter++;
     std::cout << "Prefix: " << prefix << "\n";
@@ -68,7 +70,8 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
     for (const Pattern &pat : hsuub) {
         std::vector<Sequence> sdp_prime = filter_SDB(projected_sequences(pat, filtered_projected_sequences), r + 2);
         if (!sdp_prime.empty()) {
-            std::vector<Pattern> hus_prime = find_hus(pat, sdp_prime, r + 1, profit_table, util_threshold, hus_counter).first;
+            std::vector<Pattern> hus_prime = find_hus(pat, sdp_prime, r + 1, profit_table, util_threshold, hus_counter,
+                                                      max_len).first;
             hus.insert(hus.end(), hus_prime.begin(), hus_prime.end());
         }
     }
