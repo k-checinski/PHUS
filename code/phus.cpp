@@ -4,7 +4,8 @@
 #include <iostream>
 #include "phus.h"
 
-std::vector<Pattern> phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_threshold) {
+std::vector<Pattern>
+phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_threshold, unsigned max_len) {
 
     std::chrono::steady_clock::time_point phus_start = std::chrono::steady_clock::now();
     std::chrono::steady_clock::time_point initial_phase_start = std::chrono::steady_clock::now();
@@ -61,7 +62,7 @@ std::vector<Pattern> phus(const SDB &sequences, const ProfitTable &profit_table,
         for (auto const &index : index_table.at(item)) {
             sdp.push_back(filtered_sdb.at(index.sequence_id));
         }
-        auto found_hus = find_hus(pattern, sdp, r, profit_table, util_threshold, hus_counter);
+        auto found_hus = find_hus(pattern, sdp, r, profit_table, util_threshold, hus_counter, max_len);
         std::vector<Pattern> hus_prime = found_hus.first;
         hus_counter += found_hus.second;
         hus.insert(hus.end(), hus_prime.begin(), hus_prime.end());
