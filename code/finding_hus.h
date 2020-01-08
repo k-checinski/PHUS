@@ -32,5 +32,6 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
 
 std::ostream &operator<<(std::ostream &ost, const TSTable &table);
 
+void push_back_uniques(std::vector<Pattern>& current, const std::vector<Pattern>& new_elems);
 
 #endif //PHUS_EDAMI_FINDING_HUS_H
