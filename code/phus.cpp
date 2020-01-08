@@ -65,12 +65,12 @@ phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_thresh
         auto found_hus = find_hus(pattern, sdp, r, profit_table, util_threshold, hus_counter, max_len);
         std::vector<Pattern> hus_prime = found_hus.first;
         hus_counter += found_hus.second;
-        hus.insert(hus.end(), hus_prime.begin(), hus_prime.end());
+        push_back_uniques(hus, hus_prime);
     }
 
     std::chrono::steady_clock::time_point phus_end = std::chrono::steady_clock::now();
     std::cout << "[TIME] algorithm duration: "
-              << std::chrono::duration_cast<std::chrono::seconds>(phus_end - phus_start).count() << "[s]"
+              << std::chrono::duration_cast<std::chrono::milliseconds>(phus_end - phus_start).count() << "[s]"
               << std::endl;
     std:: cout << "number of find_hus calls: " << hus_counter << std::endl;
     return hus;

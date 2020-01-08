@@ -8,8 +8,8 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
         return std::pair<std::vector<Pattern>,unsigned>(std::vector<Pattern>(), hus_counter);
     }
     hus_counter++;
-    std::cout << "Prefix: " << prefix << "\n";
-    std::cout << "r = " << r << '\n';
+//    std::cout << "Prefix: " << prefix << "\n";
+//    std::cout << "r = " << r << '\n';
     /// PSTEP 1
     TSTable ts_table;
     /// PSTEP 2
@@ -25,8 +25,7 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
             update_table(ts_table, pattern, sequence_util, mu);
         }
     }
-
-    std::cout << ts_table << "\n";
+//    std::cout << ts_table << "\n";
     /// PSTEP 3 / 4
     std::vector<Pattern> hsuub;
     std::vector<Pattern> hus;
@@ -45,27 +44,27 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
         }
     }
     ///DEBUG
-    std::cout << "HUS" << std::endl;
-    for (const auto &seq : hus) {
-        std::cout << seq << "\n";
-    }
-    std::cout << "\nHSUUB" << std::endl;
-    for (const auto &seq : hsuub) {
-        std::cout << seq << "\n";
-    }
+//    std::cout << "HUS" << std::endl;
+//    for (const auto &seq : hus) {
+//        std::cout << seq << "\n";
+//    }
+//    std::cout << "\nHSUUB" << std::endl;
+//    for (const auto &seq : hsuub) {
+//        std::cout << seq << "\n";
+//    }
     /// PSTEP 5
-    std::cout << "\nfiltered_projected_sequences\n";
+//    std::cout << "\nfiltered_projected_sequences\n";
     std::vector<Sequence> filtered_projected_sequences = filter_SDB(hsuub_items, projected_seq, r + 2);
-    for (const auto &seq : filtered_projected_sequences) {
-        std::cout << seq << "\n";
-    }
+//    for (const auto &seq : filtered_projected_sequences) {
+//        std::cout << seq << "\n";
+//    }
     /// PSTEP 6
     for (const Pattern &pat : hsuub) {
         std::vector<Sequence> sdp_prime = filter_SDB(projected_sequences(pat, filtered_projected_sequences), r + 2);
         if (!sdp_prime.empty()) {
             std::vector<Pattern> hus_prime = find_hus(pat, sdp_prime, r + 1, profit_table, util_threshold, hus_counter,
                                                       max_len).first;
-            hus.insert(hus.end(), hus_prime.begin(), hus_prime.end());
+            push_back_uniques(hus, hus_prime);
         }
     }
     return std::pair<std::vector<Pattern>,unsigned>(hus, hus_counter);
@@ -96,7 +95,6 @@ std::vector<Pattern> generate_prefix_patterns(const Sequence &seq, const Pattern
         new_pattern.push_back(PatternElem({item}));
         patterns.push_back(new_pattern);
     }
-
     return patterns;
 }
 
@@ -116,4 +114,19 @@ std::ostream &operator<<(std::ostream &ost, const TSTable &table) {
         ost << tuple.pat << "\tasu = " << tuple.asu << "\tsuub = " << tuple.suub << '\n';
     }
     return ost;
+}
+
+void push_back_uniques(std::vector<Pattern> &current, const std::vector<Pattern> &new_elems) {
+    for (const auto& elem: new_elems) {
+        bool unique = true;
+        for (const auto& curr_elem: current) {
+            if (elem == curr_elem) {
+                unique = false;
+                break;
+            }
+        }
+        if (unique) {
+            current.push_back(elem);
+        }
+    }
 }
