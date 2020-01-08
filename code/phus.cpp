@@ -70,7 +70,7 @@ phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_thresh
 
     std::chrono::steady_clock::time_point phus_end = std::chrono::steady_clock::now();
     std::cout << "[TIME] algorithm duration: "
-              << std::chrono::duration_cast<std::chrono::seconds>(phus_end - phus_start).count() << "[s]"
+              << std::chrono::duration_cast<std::chrono::milliseconds>(phus_end - phus_start).count() << "[s]"
               << std::endl;
     std:: cout << "number of find_hus calls: " << hus_counter << std::endl;
     return hus;

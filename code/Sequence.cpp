@@ -98,7 +98,7 @@ std::vector<unsigned> projected_sequences(Item item, const IndexTable &index_tab
 
 std::vector<Sequence> projected_sequences(const Pattern &pattern, const std::vector<Sequence> &sequences) {
 
-    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+//    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
     std::vector<Sequence> proj_sequences;
     for (const Sequence& seq : sequences) {
@@ -107,10 +107,10 @@ std::vector<Sequence> projected_sequences(const Pattern &pattern, const std::vec
             proj_sequences.push_back(std::move(proj_seq));
         }
     }
-
-    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    std::cout << "project sequences for pattern: " << pattern << " took "
-              << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
+//
+//    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+//    std::cout << "project sequences for pattern: " << pattern << " took "
+//              << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
 
     return proj_sequences;
   }
