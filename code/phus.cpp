@@ -6,10 +6,6 @@
 
 std::vector<Pattern>
 phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_threshold, unsigned max_len) {
-
-    std::chrono::steady_clock::time_point phus_start = std::chrono::steady_clock::now();
-    std::chrono::steady_clock::time_point initial_phase_start = std::chrono::steady_clock::now();
-
     std::map<Item, ItemTableTuple> item_table;
     for (auto const &row: profit_table) {
         item_table[row.first] = ItemTableTuple();
@@ -48,10 +44,7 @@ phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_thresh
     SDB filtered_sdb = filter_SDB(promising_items, sequences, r + 1);
     /// STEP 7
     IndexTable index_table = create_index_table(filtered_sdb, promising_items);
-    std::chrono::steady_clock::time_point initial_phase_end = std::chrono::steady_clock::now();
-    std::cout << "[TIME] initial phase duration: "
-              << std::chrono::duration_cast<std::chrono::microseconds>(initial_phase_end - initial_phase_start).count()
-              << "[µs]" << std::endl;
+
     /// STEP 8
 
     unsigned hus_counter = 0;
@@ -68,10 +61,6 @@ phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_thresh
         push_back_uniques(hus, hus_prime);
     }
 
-    std::chrono::steady_clock::time_point phus_end = std::chrono::steady_clock::now();
-    std::cout << "[TIME] algorithm duration: "
-              << std::chrono::duration_cast<std::chrono::milliseconds>(phus_end - phus_start).count() << "[s]"
-              << std::endl;
     std:: cout << "number of find_hus calls: " << hus_counter << std::endl;
     return hus;
 }

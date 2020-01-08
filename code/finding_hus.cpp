@@ -4,7 +4,7 @@ std::pair<std::vector<Pattern>, unsigned int>
 find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsigned r, const ProfitTable &profit_table,
          unsigned util_threshold, unsigned hus_counter, unsigned max_len) {
 
-    if (r > max_len && max_len != 0) {
+    if (r > max_len -1 && max_len != 0) {
         return std::pair<std::vector<Pattern>,unsigned>(std::vector<Pattern>(), hus_counter);
     }
     hus_counter++;

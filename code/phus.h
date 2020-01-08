@@ -13,6 +13,13 @@ struct ItemTableTuple {
     unsigned suub = 0;
 };
 
+struct DiscoveredPatternStatistics {
+    unsigned max = 0;
+    unsigned min = INT8_MAX;
+    double average = 0;
+    double std_dev = 0;
+};
+
 std::vector<Pattern>
 phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_threshold, unsigned max_len);
 
