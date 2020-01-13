@@ -4,15 +4,6 @@ bool has_item(const Item& item, const Transaction& transaction) {
     return item_count(item, transaction) != 0;
 }
 
-bool has_items(const Transaction &transaction, const PatternElem &items) {
-    for (Item item : items) {
-        if (!has_item(item, transaction))
-            return false;
-    }
-    return true;
-}
-
-
 unsigned item_count(const Item& item, const Transaction& transaction) {
     return transaction.count(item) != 0 ? transaction.at(item) : 0;
 }

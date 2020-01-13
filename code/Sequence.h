@@ -89,8 +89,6 @@ SDB filter_SDB(const SDB& sdb, unsigned min_length=0);
  */
 unsigned count_items(const Sequence& sequence);
 
-std::vector<unsigned> projected_sequences(Item item, const IndexTable& index_table);
-
 std::vector<Sequence> projected_sequences(const Pattern& pattern, const std::vector<Sequence>& sequences);
 
 Sequence::const_iterator prefix_end_position(const Pattern& prefix, const Sequence& sequence);
@@ -105,8 +103,6 @@ std::set<Item> items_between(Sequence::const_iterator first, Sequence::const_ite
 
 std::set<Item> items_in_supersets(Sequence::const_iterator first, Sequence::const_iterator last,
                                   const PatternElem& elem);
-
-std::set<Item> items_between(Pattern::const_iterator first, Pattern::const_iterator last);
 
 std::ostream& operator<<(std::ostream& ost, const Sequence& seq);
 std::ostream& operator<<(std::ostream& ost, const Pattern& pat);

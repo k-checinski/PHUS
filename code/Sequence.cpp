@@ -88,14 +88,6 @@ unsigned count_items(const Sequence &sequence) {
     return items;
 }
 
-std::vector<unsigned> projected_sequences(Item item, const IndexTable &index_table) {
-    std::vector<unsigned> sequences_ids;
-    for (auto const& index : index_table.at(item)) {
-        sequences_ids.push_back(index.sequence_id);
-    }
-    return sequences_ids;
-}
-
 std::vector<Sequence> projected_sequences(const Pattern &pattern, const std::vector<Sequence> &sequences) {
 
 //    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
@@ -232,17 +224,6 @@ std::ostream &operator<<(std::ostream &ost, const Pattern &pat) {
         ost << "}";
     ost<<">";
     return ost;
-}
-
-std::set<Item> items_between(Pattern::const_iterator first, Pattern::const_iterator last) {
-    std::set<Item> found_items;
-    for (auto it = first; it != last; ++it) {
-        const PatternElem & tr = *it;
-        for (const auto& item : tr) {
-            found_items.insert(item);
-        }
-    }
-    return found_items;
 }
 
 Sequence sequence_projection(const Pattern &prefix, const Sequence &sequence) {
