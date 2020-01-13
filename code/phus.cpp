@@ -4,7 +4,7 @@
 #include <iostream>
 #include "phus.h"
 
-std::vector<Pattern>
+std::vector<std::pair<Pattern, unsigned int>>
 phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_threshold, unsigned max_len) {
     std::map<Item, ItemTableTuple> item_table;
     for (auto const &row: profit_table) {
@@ -28,14 +28,14 @@ phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_thresh
     /// STEP 3/4
     std::set<Item> promising_items;
     std::vector<Pattern> hsuub;
-    std::vector<Pattern> hus;
+    std::vector<std::pair<Pattern, unsigned>> hus;
     for (auto const &item_tuple: item_table) {
         if (item_tuple.second.suub >= util_threshold) {
             promising_items.insert(item_tuple.first);
             hsuub.push_back(Pattern({{item_tuple.first}}));
         }
         if (item_tuple.second.asu >= util_threshold) {
-            hus.push_back(Pattern({{item_tuple.first}}));
+            hus.push_back(std::pair<Pattern, unsigned>({{item_tuple.first}}, item_tuple.second.asu));
         }
     }
     /// STEP 5
@@ -56,7 +56,7 @@ phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_thresh
             sdp.push_back(filtered_sdb.at(index.sequence_id));
         }
         auto found_hus = find_hus(pattern, sdp, r, profit_table, util_threshold, hus_counter, max_len);
-        std::vector<Pattern> hus_prime = found_hus.first;
+        std::vector<std::pair<Pattern, unsigned>> hus_prime = found_hus.first;
         hus_counter += found_hus.second;
         push_back_uniques(hus, hus_prime);
     }

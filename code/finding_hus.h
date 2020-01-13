@@ -26,12 +26,13 @@ void update_table(TSTable &table, const Pattern &pattern, unsigned su, unsigned 
 
 std::vector<Pattern> generate_prefix_patterns(const Sequence &seq, const Pattern &prefix);
 
-std::pair<std::vector<Pattern>, unsigned int>
+std::pair<std::vector<std::pair<Pattern, unsigned int> >, unsigned int>
 find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsigned r, const ProfitTable &profit_table,
          unsigned util_threshold, unsigned hus_counter, unsigned max_len);
 
 std::ostream &operator<<(std::ostream &ost, const TSTable &table);
 
-void push_back_uniques(std::vector<Pattern>& current, const std::vector<Pattern>& new_elems);
+void push_back_uniques(std::vector<std::pair<Pattern, unsigned int>> &current,
+                       const std::vector<std::pair<Pattern, unsigned int>> &new_elems);
 
 #endif //PHUS_EDAMI_FINDING_HUS_H
