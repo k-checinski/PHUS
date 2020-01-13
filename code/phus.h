@@ -13,7 +13,7 @@ struct ItemTableTuple {
     unsigned suub = 0;
 };
 
-std::vector<Pattern>
+std::vector<std::pair<Pattern, unsigned int>>
 phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_threshold, unsigned max_len);
 
 #endif //PHUS_EDAMI_PHUS_H

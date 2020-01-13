@@ -1,11 +1,11 @@
 #include "finding_hus.h"
 
-std::pair<std::vector<Pattern>, unsigned int>
+std::pair<std::vector<std::pair<Pattern, unsigned int> >, unsigned int>
 find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsigned r, const ProfitTable &profit_table,
          unsigned util_threshold, unsigned hus_counter, unsigned max_len) {
 
     if (r > max_len && max_len != 0) {
-        return std::pair<std::vector<Pattern>,unsigned>(std::vector<Pattern>(), hus_counter);
+        return std::pair<std::vector<std::pair<Pattern, unsigned int> >, unsigned int>(std::vector<std::pair<Pattern, unsigned> >(), hus_counter);
     }
     hus_counter++;
 //    std::cout << "Prefix: " << prefix << "\n";
@@ -28,7 +28,7 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
 //    std::cout << ts_table << "\n";
     /// PSTEP 3 / 4
     std::vector<Pattern> hsuub;
-    std::vector<Pattern> hus;
+    std::vector<std::pair<Pattern, unsigned>> hus;
     std::set<Item> hsuub_items;
     for (const TSTuple &tuple : ts_table) {
         if (tuple.suub >= util_threshold) {
@@ -40,7 +40,7 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
             }
         }
         if (tuple.asu >= util_threshold) {
-            hus.push_back(tuple.pat);
+            hus.emplace_back(tuple.pat, tuple.asu);
         }
     }
     ///DEBUG
@@ -62,12 +62,12 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
     for (const Pattern &pat : hsuub) {
         std::vector<Sequence> sdp_prime = filter_SDB(projected_sequences(pat, filtered_projected_sequences), r + 2);
         if (!sdp_prime.empty()) {
-            std::vector<Pattern> hus_prime = find_hus(pat, sdp_prime, r + 1, profit_table, util_threshold, hus_counter,
+            std::vector<std::pair<Pattern, unsigned> > hus_prime = find_hus(pat, sdp_prime, r + 1, profit_table, util_threshold, hus_counter,
                                                       max_len).first;
             push_back_uniques(hus, hus_prime);
         }
     }
-    return std::pair<std::vector<Pattern>,unsigned>(hus, hus_counter);
+    return std::pair<std::vector<std::pair<Pattern, unsigned>>,unsigned>(hus, hus_counter);
 }
 
 
@@ -116,17 +116,20 @@ std::ostream &operator<<(std::ostream &ost, const TSTable &table) {
     return ost;
 }
 
-void push_back_uniques(std::vector<Pattern> &current, const std::vector<Pattern> &new_elems) {
+void push_back_uniques(std::vector<std::pair<Pattern, unsigned int>> &current,
+        const std::vector<std::pair<Pattern, unsigned int>> &new_elems) {
     for (const auto& elem: new_elems) {
         bool unique = true;
+        unsigned util = elem.second;
         for (const auto& curr_elem: current) {
-            if (elem == curr_elem) {
+            if (elem.first == curr_elem.first) {
+                util = elem.second > curr_elem.second ? elem.second : curr_elem.second;
                 unique = false;
                 break;
             }
         }
         if (unique) {
-            current.push_back(elem);
+            current.emplace_back(elem.first, util);
         }
     }
 }
