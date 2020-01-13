@@ -7,26 +7,26 @@
 #include "phus.h"
 
 
-DiscoveredPatternStatistics get_statistics(const std::vector<Pattern> &patterns) {
+DiscoveredPatternStatistics get_statistics(const std::vector<std::pair<Pattern, unsigned int>> &patterns) {
 
     unsigned cardinalities_sum = 0;
     double variance = 0;
     DiscoveredPatternStatistics statistics;
 
     for (const auto &pattern : patterns) {
-        if (pattern.size() > statistics.max) {
-            statistics.max = pattern.size();
+        if (pattern.first.size() > statistics.max) {
+            statistics.max = pattern.first.size();
         }
-        if (pattern.size() < statistics.min) {
-            statistics.min = pattern.size();
+        if (pattern.first.size() < statistics.min) {
+            statistics.min = pattern.first.size();
         }
-        cardinalities_sum += pattern.size();
+        cardinalities_sum += pattern.first.size();
     }
     statistics.average = cardinalities_sum / patterns.size();
 
 
     for (const auto &pattern : patterns) {
-        variance += pow(pattern.size() - statistics.average, 2);
+        variance += pow(pattern.first.size() - statistics.average, 2);
     }
     variance = variance / patterns.size();
     statistics.std_dev = sqrt(variance);

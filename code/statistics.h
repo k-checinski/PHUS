@@ -11,6 +11,6 @@
 #include "phus.h"
 
 
-DiscoveredPatternStatistics get_statistics(const std::vector<Pattern>& patterns);
+DiscoveredPatternStatistics get_statistics(const std::vector<std::pair<Pattern, unsigned int>> &patterns);
 
 void show_average_from_statistics(const std::vector<DiscoveredPatternStatistics>& statistics);

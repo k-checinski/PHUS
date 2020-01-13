@@ -83,12 +83,6 @@ int main(int argc, char *argv[]) {
     std::cout<<dataset.first<<std::endl;
     std::cout<<"Profit table:"<<std::endl;
     std::cout<<dataset.second<<std::endl;
-    
-
-    std::vector<std::pair<Pattern, unsigned>> found_patterns = phus(dataset.first, dataset.second, minimum_utility_threshold, max_length);
-    std::cout << "RESULT\n";
-    for (const auto &pat: found_patterns)
-        std::cout << pat.first << "\tasu: " << pat.second << "\n";
 
     std::vector<DiscoveredPatternStatistics> algorithm_runs_statistics;
 
@@ -98,8 +92,9 @@ int main(int argc, char *argv[]) {
 
         std::cout << "[Iteration " << i << "] \n";
         std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-        std::vector<Pattern> found_patterns = phus(dataset.first, dataset.second, minimum_utility_threshold,
-                                                   max_length);
+        std::vector<std::pair<Pattern, unsigned>> found_patterns = phus(dataset.first, dataset.second, minimum_utility_threshold,
+                                                                        max_length);
+
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
         unsigned run_time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 
@@ -108,7 +103,7 @@ int main(int argc, char *argv[]) {
         std::cout << "Algorithm took " << run_time << " [ms]:" << "\n";
 
         for (const auto &pat: found_patterns)
-            std::cout << pat << "\n";
+            std::cout << pat.first << "\tasu: "<< pat.second << "\n";
 
         DiscoveredPatternStatistics statistics = get_statistics(found_patterns);
         std::cout << "Patterns minimum cardinality: " << statistics.min << "\n";
