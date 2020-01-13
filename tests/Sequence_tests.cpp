@@ -192,5 +192,4 @@ TEST_CASE("Sequence projection works") {
     REQUIRE(projection[1] == Transaction{{4, 1}, {5, 1}});
     REQUIRE(projection[2] == Transaction{{6, 1}});
     REQUIRE(projection[3] == Transaction{{7, 1}, {1, 1}});
-    std::cout<<projection;
 }

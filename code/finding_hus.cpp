@@ -1,15 +1,18 @@
+// #define DEBUG
+
 #include "finding_hus.h"
 
-std::pair<std::vector<Pattern>, unsigned int>
+std::pair<std::vector<std::pair<Pattern, unsigned int> >, unsigned int>
 find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsigned r, const ProfitTable &profit_table,
          unsigned util_threshold, unsigned hus_counter, unsigned max_len) {
 
     if (r > max_len -1 && max_len != 0) {
-        return std::pair<std::vector<Pattern>,unsigned>(std::vector<Pattern>(), hus_counter);
+        return std::pair<std::vector<std::pair<Pattern, unsigned int> >, unsigned int>(std::vector<std::pair<Pattern, unsigned> >(), hus_counter);
     }
     hus_counter++;
-//    std::cout << "Prefix: " << prefix << "\n";
-//    std::cout << "r = " << r << '\n';
+#ifdef DEBUG
+    std::cout << "Prefix: " << prefix << "\tr = " << r << '\n';
+#endif
     /// PSTEP 1
     TSTable ts_table;
     /// PSTEP 2
@@ -18,17 +21,18 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
         unsigned sequence_util = sequence_utility(seq_y, profit_table);
         std::vector<Pattern> p_primes = generate_prefix_patterns(seq_y, prefix);
         for (const Pattern &pattern : p_primes) {
-//            /// There are analysed only patterns with mutual prefix. Thus we need only 2 last transactions in pattern
-//            /// to recognise it in temporary sequence table.
-//            Pattern shortened_pattern = {*(pattern.rend()), *(pattern.rend()-1)};
             unsigned mu = utility_of_pattern(pattern, seq_y, profit_table);
             update_table(ts_table, pattern, sequence_util, mu);
         }
     }
-//    std::cout << ts_table << "\n";
+#ifdef  DEBUG
+    std::cout << "TS table\n";
+    std::cout << ts_table << "\n";
+#endif
+
     /// PSTEP 3 / 4
     std::vector<Pattern> hsuub;
-    std::vector<Pattern> hus;
+    std::vector<std::pair<Pattern, unsigned>> hus;
     std::set<Item> hsuub_items;
     for (const TSTuple &tuple : ts_table) {
         if (tuple.suub >= util_threshold) {
@@ -40,34 +44,23 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
             }
         }
         if (tuple.asu >= util_threshold) {
-            hus.push_back(tuple.pat);
+            hus.emplace_back(tuple.pat, tuple.asu);
         }
     }
-    ///DEBUG
-//    std::cout << "HUS" << std::endl;
-//    for (const auto &seq : hus) {
-//        std::cout << seq << "\n";
-//    }
-//    std::cout << "\nHSUUB" << std::endl;
-//    for (const auto &seq : hsuub) {
-//        std::cout << seq << "\n";
-//    }
+
     /// PSTEP 5
-//    std::cout << "\nfiltered_projected_sequences\n";
     std::vector<Sequence> filtered_projected_sequences = filter_SDB(hsuub_items, projected_seq, r + 2);
-//    for (const auto &seq : filtered_projected_sequences) {
-//        std::cout << seq << "\n";
-//    }
+
     /// PSTEP 6
     for (const Pattern &pat : hsuub) {
         std::vector<Sequence> sdp_prime = filter_SDB(projected_sequences(pat, filtered_projected_sequences), r + 2);
         if (!sdp_prime.empty()) {
-            std::vector<Pattern> hus_prime = find_hus(pat, sdp_prime, r + 1, profit_table, util_threshold, hus_counter,
+            std::vector<std::pair<Pattern, unsigned> > hus_prime = find_hus(pat, sdp_prime, r + 1, profit_table, util_threshold, hus_counter,
                                                       max_len).first;
             push_back_uniques(hus, hus_prime);
         }
     }
-    return std::pair<std::vector<Pattern>,unsigned>(hus, hus_counter);
+    return std::pair<std::vector<std::pair<Pattern, unsigned>>,unsigned>(hus, hus_counter);
 }
 
 
@@ -116,17 +109,20 @@ std::ostream &operator<<(std::ostream &ost, const TSTable &table) {
     return ost;
 }
 
-void push_back_uniques(std::vector<Pattern> &current, const std::vector<Pattern> &new_elems) {
+void push_back_uniques(std::vector<std::pair<Pattern, unsigned int>> &current,
+        const std::vector<std::pair<Pattern, unsigned int>> &new_elems) {
     for (const auto& elem: new_elems) {
         bool unique = true;
+        unsigned util = elem.second;
         for (const auto& curr_elem: current) {
-            if (elem == curr_elem) {
+            if (elem.first == curr_elem.first) {
+                util = elem.second > curr_elem.second ? elem.second : curr_elem.second;
                 unique = false;
                 break;
             }
         }
         if (unique) {
-            current.push_back(elem);
+            current.emplace_back(elem.first, util);
         }
     }
 }
