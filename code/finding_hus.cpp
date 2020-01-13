@@ -21,9 +21,6 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
         unsigned sequence_util = sequence_utility(seq_y, profit_table);
         std::vector<Pattern> p_primes = generate_prefix_patterns(seq_y, prefix);
         for (const Pattern &pattern : p_primes) {
-//            /// There are analysed only patterns with mutual prefix. Thus we need only 2 last transactions in pattern
-//            /// to recognise it in temporary sequence table.
-//            Pattern shortened_pattern = {*(pattern.rend()), *(pattern.rend()-1)};
             unsigned mu = utility_of_pattern(pattern, seq_y, profit_table);
             update_table(ts_table, pattern, sequence_util, mu);
         }
@@ -52,11 +49,8 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
     }
 
     /// PSTEP 5
-//    std::cout << "\nfiltered_projected_sequences\n";
     std::vector<Sequence> filtered_projected_sequences = filter_SDB(hsuub_items, projected_seq, r + 2);
-//    for (const auto &seq : filtered_projected_sequences) {
-//        std::cout << seq << "\n";
-//    }
+
     /// PSTEP 6
     for (const Pattern &pat : hsuub) {
         std::vector<Sequence> sdp_prime = filter_SDB(projected_sequences(pat, filtered_projected_sequences), r + 2);
