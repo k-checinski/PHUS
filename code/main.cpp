@@ -68,6 +68,13 @@ int main(int argc, char *argv[]) {
 
     SequenceReader sequence_reader;
     std::pair<SDB, ProfitTable> dataset = sequence_reader.prepare_data_for_sequence_mining(input_file);
+
+    std::cout<<"Dataset"<<std::endl;
+    std::cout<<dataset.first<<std::endl;
+    std::cout<<"Profit table:"<<std::endl;
+    std::cout<<dataset.second<<std::endl;
+    
+
     std::vector<std::pair<Pattern, unsigned>> found_patterns = phus(dataset.first, dataset.second, minimum_utility_threshold, max_length);
     std::cout << "RESULT\n";
     for (const auto &pat: found_patterns)

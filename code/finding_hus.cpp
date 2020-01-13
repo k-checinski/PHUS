@@ -1,3 +1,5 @@
+// #define DEBUG
+
 #include "finding_hus.h"
 
 std::pair<std::vector<std::pair<Pattern, unsigned int> >, unsigned int>
@@ -8,8 +10,9 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
         return std::pair<std::vector<std::pair<Pattern, unsigned int> >, unsigned int>(std::vector<std::pair<Pattern, unsigned> >(), hus_counter);
     }
     hus_counter++;
-//    std::cout << "Prefix: " << prefix << "\n";
-//    std::cout << "r = " << r << '\n';
+#ifdef DEBUG
+    std::cout << "Prefix: " << prefix << "\tr = " << r << '\n';
+#endif
     /// PSTEP 1
     TSTable ts_table;
     /// PSTEP 2
@@ -25,7 +28,11 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
             update_table(ts_table, pattern, sequence_util, mu);
         }
     }
-//    std::cout << ts_table << "\n";
+#ifdef  DEBUG
+    std::cout << "TS table\n";
+    std::cout << ts_table << "\n";
+#endif
+
     /// PSTEP 3 / 4
     std::vector<Pattern> hsuub;
     std::vector<std::pair<Pattern, unsigned>> hus;
@@ -43,15 +50,7 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
             hus.emplace_back(tuple.pat, tuple.asu);
         }
     }
-    ///DEBUG
-//    std::cout << "HUS" << std::endl;
-//    for (const auto &seq : hus) {
-//        std::cout << seq << "\n";
-//    }
-//    std::cout << "\nHSUUB" << std::endl;
-//    for (const auto &seq : hsuub) {
-//        std::cout << seq << "\n";
-//    }
+
     /// PSTEP 5
 //    std::cout << "\nfiltered_projected_sequences\n";
     std::vector<Sequence> filtered_projected_sequences = filter_SDB(hsuub_items, projected_seq, r + 2);
