@@ -114,5 +114,6 @@ std::ostream& operator<<(std::ostream& ost, const Pattern& pat);
 Transaction transaction_projection(const PatternElem& elem, const Transaction& transaction);
 Sequence sequence_projection(const Pattern& prefix, const Sequence& sequence);
 
+std::ostream& operator<<(std::ostream& ost, const SDB& sdb);
 
 #endif //PHUS_EDAMI_SEQUENCE_H

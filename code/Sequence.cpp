@@ -286,4 +286,10 @@ Transaction transaction_projection(const PatternElem &elem, const Transaction &t
     return projection;
 }
 
+std::ostream &operator<<(std::ostream &ost, const SDB &sdb) {
+    for (const auto& sequence : sdb) {
+        std::cout << sequence << std::endl;
+    }
+    return ost;
+}
 
