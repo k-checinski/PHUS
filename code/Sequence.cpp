@@ -11,20 +11,20 @@ bool has_item(const Item &item, const Sequence &sequence) {
     return false;
 }
 
-unsigned utility_of_item(const Item &item, const Sequence &seq, const ProfitTable &profit_table) {
+unsigned utility_of_item(const Item &item, const Sequence &seq) {
     unsigned max_util = 0;
     for (const Transaction &t : seq) {
         unsigned utility;
-        if ((utility = item_count(item, t) * profit_table.at(item)) > max_util)
+        if ((utility = item_count(item, t)) > max_util)
             max_util = utility;
     }
     return max_util;
 }
 
-unsigned actual_sequence_utility(const Item &item, const SDB &sdb, const ProfitTable &profit_table) {
+unsigned actual_sequence_utility(const Item &item, const SDB &sdb) {
     unsigned utility = 0;
     for (const Sequence &seq : sdb) {
-        utility += utility_of_item(item, seq, profit_table);
+        utility += utility_of_item(item, seq);
     }
     return utility;
 }
@@ -272,5 +272,15 @@ std::ostream &operator<<(std::ostream &ost, const SDB &sdb) {
         std::cout << sequence << std::endl;
     }
     return ost;
+}
+
+void transform_dataset_with_profit_table(SDB &sequences, const ProfitTable &profit_table) {
+    for (Sequence &sequence : sequences) {
+        for (Transaction &transaction : sequence) {
+            for (auto &item : transaction) {
+                item.second = item.second * profit_table.at(item.first);
+            }
+        }
+    }
 }
 

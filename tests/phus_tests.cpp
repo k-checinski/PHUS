@@ -16,12 +16,12 @@ TEST_CASE("PHUS works") {
     Sequence seq10 = {{{1, 2}}, {{3, 4}}, {{5, 2}}};
     SDB sdb = {seq1, seq2, seq3, seq4, seq5, seq6, seq7, seq8, seq9, seq10};
     unsigned threshold = 65;
-    std::vector<Pattern> found_patterns = phus(sdb, profit_table, threshold, 0);
+    std::vector<std::pair<Pattern, unsigned>> found_patterns = phus(sdb, profit_table, threshold, 0);
     std::cout<<"RESULT\n";
     for (const auto& pat: found_patterns)
-        std::cout<<pat<<"\n";
+        std::cout<<pat.first<<"\tasu: "<<pat.second<<"\n";
     REQUIRE(found_patterns.size() == 2);
-    REQUIRE(found_patterns[0] == Pattern{{1}, {5}});
-    REQUIRE(found_patterns[1] == Pattern{{1}, {3}, {5}});
+    REQUIRE(found_patterns[0].first == Pattern{{1}, {5}});
+    REQUIRE(found_patterns[1].first == Pattern{{1}, {3}, {5}});
 }
 
