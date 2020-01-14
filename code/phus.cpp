@@ -6,6 +6,7 @@
 
 std::vector<std::pair<Pattern, unsigned int>>
 phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_threshold, unsigned max_len) {
+
     std::map<Item, ItemTableTuple> item_table;
     for (auto const &row: profit_table) {
         item_table[row.first] = ItemTableTuple();
@@ -16,7 +17,7 @@ phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_thresh
 
     for (auto const &sequence: sequences) {
         for (auto const &transaction: sequence) {
-            unsigned seq_util = sequence_utility(sequence, profit_table);
+            unsigned seq_util = sequence_utility(sequence);
             for (auto const &item: transaction) {
                 unsigned util = profit_table.at(item.first) * item.second;
                 item_table[item.first].asu += util;
@@ -55,7 +56,7 @@ phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_thresh
         for (auto const &index : index_table.at(item)) {
             sdp.push_back(filtered_sdb.at(index.sequence_id));
         }
-        auto found_hus = find_hus(pattern, sdp, r, profit_table, util_threshold, hus_counter, max_len);
+        auto found_hus = find_hus(pattern, sdp, r, util_threshold, hus_counter, max_len);
         std::vector<std::pair<Pattern, unsigned>> hus_prime = found_hus.first;
         hus_counter += found_hus.second;
         push_back_uniques(hus, hus_prime);

@@ -29,19 +29,19 @@ unsigned actual_sequence_utility(const Item &item, const SDB &sdb, const ProfitT
     return utility;
 }
 
-unsigned sequence_utility(const Sequence &seq, const ProfitTable &profit_table) {
+unsigned sequence_utility(const Sequence &seq) {
     unsigned utility = 0;
     for (const Transaction &t : seq) {
-        utility += transaction_utility(t, profit_table);
+        utility += transaction_utility(t);
     }
     return utility;
 }
 
-unsigned sequence_utility_upper_bound(const Item &item, const SDB &sdb, const ProfitTable &profit_table) {
+unsigned sequence_utility_upper_bound(const Item &item, const SDB &sdb) {
     unsigned utility = 0;
     for (const Sequence &seq : sdb) {
         if (has_item(item, seq))
-            utility += sequence_utility(seq, profit_table);
+            utility += sequence_utility(seq);
     }
     return utility;
 }
@@ -152,7 +152,7 @@ std::set<Item> items_in_supersets(Sequence::const_iterator first, Sequence::cons
     return found_items;
 }
 
-unsigned utility_of_pattern(const Pattern &pattern, const Sequence &seq, const ProfitTable &profit_table) {
+unsigned utility_of_pattern(const Pattern &pattern, const Sequence &seq) {
     unsigned max_fit_len = 0;
     unsigned best_utility = 0;
     std::vector<unsigned> prev_row = {0};
@@ -160,12 +160,12 @@ unsigned utility_of_pattern(const Pattern &pattern, const Sequence &seq, const P
     for (unsigned i = 1; i < seq.size() + 1; ++i) {
         for (unsigned j = 1; j <= max_fit_len; ++j) {
             unsigned non_fit_gain = prev_row[j];
-            unsigned d_fit_gain = pattern_elem_utility(seq[i - 1], pattern[j - 1], profit_table);
+            unsigned d_fit_gain = pattern_elem_utility(seq[i - 1], pattern[j - 1]);
             unsigned fit_gain = d_fit_gain != 0 ? prev_row[j - 1] + d_fit_gain : 0;
             curr_row.push_back(non_fit_gain > fit_gain ? non_fit_gain : fit_gain);
         }
         if (max_fit_len != pattern.size()) {
-            unsigned d_fit_gain = pattern_elem_utility(seq[i - 1], pattern[max_fit_len], profit_table);
+            unsigned d_fit_gain = pattern_elem_utility(seq[i - 1], pattern[max_fit_len]);
             if (d_fit_gain != 0) {
                 curr_row.push_back(prev_row[max_fit_len] + d_fit_gain);
                 ++max_fit_len;

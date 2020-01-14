@@ -15,7 +15,7 @@
  */
 bool has_item(const Item& item, const Transaction& transaction);
 
-unsigned pattern_elem_utility(const Transaction& t, const PatternElem& pat, const ProfitTable& profit_table);
+unsigned pattern_elem_utility(const Transaction& t, const PatternElem& pat);
 /**
  * Counts items in transaction.
  * @param item
@@ -25,12 +25,11 @@ unsigned pattern_elem_utility(const Transaction& t, const PatternElem& pat, cons
 unsigned item_count(const Item& item, const Transaction& transaction);
 
 /**
- * Computes utility of transaction. Sums items quantities multiplied by their utility in profit_table.
+ * Computes utility of transaction. Sums items quantities.
  * @param transaction
- * @param profit_table
  * @return
  */
-unsigned transaction_utility(const Transaction& transaction, const ProfitTable& profit_table);
+unsigned transaction_utility(const Transaction& transaction);
 
 /**
  * Generates transaction based on given transaction. Keeps items from given set only.

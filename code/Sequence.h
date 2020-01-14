@@ -33,7 +33,7 @@ unsigned utility_of_item(const Item& item, const Sequence& seq, const ProfitTabl
  * @param profit_table
  * @return
  */
-unsigned utility_of_pattern(const Pattern& pattern, const Sequence& seq, const ProfitTable& profit_table);
+unsigned utility_of_pattern(const Pattern& pattern, const Sequence& seq);
 
 /**
  * Computes actual sequence utility in sequential database for given item. Sums utility of item for every sequence
@@ -48,10 +48,9 @@ unsigned actual_sequence_utility(const Item& item, const SDB& sdb, const ProfitT
 /**
  * Computes sequence utility. Sums utility of every transaction in sequence.
  * @param seq
- * @param profit_table
  * @return
  */
-unsigned sequence_utility(const Sequence& seq, const ProfitTable& profit_table);
+unsigned sequence_utility(const Sequence& seq);
 
 /**
  * Computes sequence utility upper bound for given item. Sums utility of sequences where item occurred.

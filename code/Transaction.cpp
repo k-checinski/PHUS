@@ -8,10 +8,10 @@ unsigned item_count(const Item& item, const Transaction& transaction) {
     return transaction.count(item) != 0 ? transaction.at(item) : 0;
 }
 
-unsigned transaction_utility(const Transaction& transaction, const ProfitTable& profit_table) {
+unsigned transaction_utility(const Transaction& transaction) {
     unsigned utility = 0;
     for (auto const& item : transaction)
-        utility += item.second * profit_table.at(item.first);
+        utility += item.second;
     return utility;
 }
 
@@ -33,12 +33,12 @@ bool is_partition(const PatternElem &pattern_elem, const Transaction &transactio
     return true;
 }
 
-unsigned pattern_elem_utility(const Transaction &t, const PatternElem &pat, const ProfitTable &profit_table) {
+unsigned pattern_elem_utility(const Transaction &t, const PatternElem &pat) {
     unsigned utility = 0;
     for (Item item : pat) {
         Transaction::const_iterator it;
         if ((it = t.find(item)) != t.cend()) {
-            utility += profit_table.at(item) * it->second;
+            utility += it->second;
         }
         else {
             return 0;
