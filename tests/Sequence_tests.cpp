@@ -10,12 +10,9 @@ TEST_CASE("Appearance of item in sequence is checked correctly") {
 }
 
 TEST_CASE("Utility of an item is calculated correctly", "[Utility]") {
-    ProfitTable pt;
     Item a = 1;
     Item b = 2;
-    pt[a] = 5;
-    pt[b] = 10;
-    Sequence seq = {Transaction{{a, 4}, {b, 3}}, Transaction{{a, 5}}};
+    Sequence seq = {Transaction{{a, 20}, {b, 30}}, Transaction{{a, 25}}};
 
     REQUIRE(utility_of_item(a, seq) == 25);
     REQUIRE(utility_of_item(b, seq) == 30);
@@ -23,14 +20,13 @@ TEST_CASE("Utility of an item is calculated correctly", "[Utility]") {
 
 TEST_CASE("Actual sequence utility is calculated correctly for single items") {
     ProfitTable pt = {{1, 5}, {2, 10}, {3, 7}};
-    Sequence seq1 = {Transaction{{1, 4}, {2, 3}}, Transaction{{1, 5}}};
-    Sequence seq2 = {Transaction{{3, 1}, {2, 5}}, Transaction{{2, 1}}};
-    Sequence seq3 = {Transaction{{1, 1}}};
+    Sequence seq1 = {Transaction{{1, 20}, {2, 30}}, Transaction{{1, 20}}};
+    Sequence seq2 = {Transaction{{3, 7}, {2, 50}}, Transaction{{2, 10}}};
+    Sequence seq3 = {Transaction{{1, 10}}};
     SDB sdb = {seq1, seq2, seq3};
 
     REQUIRE(actual_sequence_utility(1, sdb) == 30);
     REQUIRE(actual_sequence_utility(2, sdb) == 80);
-
 }
 
 TEST_CASE("Utility of a sequence is calculated correctly", "[Utility]") {
@@ -140,8 +136,7 @@ TEST_CASE("Maximal utility of pattern is computed properly") {
                    PatternElem{3, 4},
                    PatternElem{2},
                    PatternElem{1}};
-    REQUIRE(utility_of_pattern(pat, seq)==43);
-
+    REQUIRE(utility_of_pattern(pat, seq)==18);
 }
 
 TEST_CASE("projected_sequences for patterns works correctly") {
@@ -187,4 +182,14 @@ TEST_CASE("Sequence projection works") {
     REQUIRE(projection[1] == Transaction{{4, 1}, {5, 1}});
     REQUIRE(projection[2] == Transaction{{6, 1}});
     REQUIRE(projection[3] == Transaction{{7, 1}, {1, 1}});
+}
+
+TEST_CASE("Dataset transformation calculates actual utility of items") {
+    Sequence seq1 = {Transaction{{1, 4}, {2, 3}}, Transaction{{1, 5}}};
+    Sequence seq2 = {Transaction{{3, 1}, {2, 5}}, Transaction{{2, 1}}};
+    SDB sdb = {seq1, seq2};
+    ProfitTable pt = {{1, 4}, {2, 2}, {3, 5}};
+    transform_dataset_with_profit_table(sdb, pt);
+    REQUIRE(sdb[0][0][1] == 16);
+    REQUIRE(sdb[1][0][2] == 10);
 }
