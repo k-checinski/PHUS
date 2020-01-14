@@ -15,8 +15,13 @@ TEST_CASE("PHUS works") {
     Sequence seq9 = {{{1, 3}}, {{4, 1}}, {{6, 1}}};
     Sequence seq10 = {{{1, 2}}, {{3, 4}}, {{5, 2}}};
     SDB sdb = {seq1, seq2, seq3, seq4, seq5, seq6, seq7, seq8, seq9, seq10};
+    transform_dataset_with_profit_table(sdb, profit_table);
+    std::set<Item> items;
+    for (const auto& item : profit_table) {
+        items.insert(item.first);
+    }
     unsigned threshold = 65;
-    std::vector<std::pair<Pattern, unsigned>> found_patterns = phus(sdb, profit_table, threshold, 0);
+    std::vector<std::pair<Pattern, unsigned>> found_patterns = phus(sdb, items, threshold, 0);
     std::cout<<"RESULT\n";
     for (const auto& pat: found_patterns)
         std::cout<<pat.first<<"\tasu: "<<pat.second<<"\n";

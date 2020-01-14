@@ -5,12 +5,9 @@
 #include "phus.h"
 
 std::vector<std::pair<Pattern, unsigned int>>
-phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_threshold, unsigned max_len) {
+phus(const SDB &sequences, const std::set<Item>& items, unsigned util_threshold, unsigned max_len) {
 
     std::map<Item, ItemTableTuple> item_table;
-    for (auto const &row: profit_table) {
-        item_table[row.first] = ItemTableTuple();
-    }
     /// STEP 1/2
 
     /// calculate one-item subsequences and their asu and suub
@@ -19,7 +16,7 @@ phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_thresh
         for (auto const &transaction: sequence) {
             unsigned seq_util = sequence_utility(sequence);
             for (auto const &item: transaction) {
-                unsigned util = profit_table.at(item.first) * item.second;
+                unsigned util = item.second;
                 item_table[item.first].asu += util;
                 item_table[item.first].suub += seq_util;
             }
