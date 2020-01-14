@@ -22,6 +22,6 @@ struct DiscoveredPatternStatistics {
 
 
 std::vector<std::pair<Pattern, unsigned int>>
-phus(const SDB &sequences, const ProfitTable &profit_table, unsigned util_threshold, unsigned max_len);
+phus(const SDB &sequences, const std::set<Item>& items, unsigned util_threshold, unsigned max_len);
 
 #endif //PHUS_EDAMI_PHUS_H

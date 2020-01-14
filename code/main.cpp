@@ -84,6 +84,12 @@ int main(int argc, char *argv[]) {
     std::cout<<"Profit table:"<<std::endl;
     std::cout<<dataset.second<<std::endl;
 
+    transform_dataset_with_profit_table(dataset.first, dataset.second);
+    std::set<Item> items;
+    for (const auto& item : dataset.second) {
+        items.insert(item.first);
+    }
+
     std::vector<DiscoveredPatternStatistics> algorithm_runs_statistics;
 
     unsigned total_time = 0;
@@ -92,7 +98,8 @@ int main(int argc, char *argv[]) {
 
         std::cout << "[Iteration " << i << "] \n";
         std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-        std::vector<std::pair<Pattern, unsigned>> found_patterns = phus(dataset.first, dataset.second, minimum_utility_threshold,
+
+        std::vector<std::pair<Pattern, unsigned>> found_patterns = phus(dataset.first, items, minimum_utility_threshold,
                                                                         max_length);
 
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();

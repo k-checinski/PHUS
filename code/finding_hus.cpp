@@ -3,7 +3,7 @@
 #include "finding_hus.h"
 
 std::pair<std::vector<std::pair<Pattern, unsigned int> >, unsigned int>
-find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsigned r, const ProfitTable &profit_table,
+find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsigned r,
          unsigned util_threshold, unsigned hus_counter, unsigned max_len) {
 
     if (r > max_len -1 && max_len != 0) {
@@ -18,10 +18,10 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
     /// PSTEP 2
 
     for (const Sequence &seq_y : projected_seq) {
-        unsigned sequence_util = sequence_utility(seq_y, profit_table);
+        unsigned sequence_util = sequence_utility(seq_y);
         std::vector<Pattern> p_primes = generate_prefix_patterns(seq_y, prefix);
         for (const Pattern &pattern : p_primes) {
-            unsigned mu = utility_of_pattern(pattern, seq_y, profit_table);
+            unsigned mu = utility_of_pattern(pattern, seq_y);
             update_table(ts_table, pattern, sequence_util, mu);
         }
     }
@@ -55,7 +55,7 @@ find_hus(const Pattern &prefix, const std::vector<Sequence> &projected_seq, unsi
     for (const Pattern &pat : hsuub) {
         std::vector<Sequence> sdp_prime = filter_SDB(projected_sequences(pat, filtered_projected_sequences), r + 2);
         if (!sdp_prime.empty()) {
-            std::vector<std::pair<Pattern, unsigned> > hus_prime = find_hus(pat, sdp_prime, r + 1, profit_table, util_threshold, hus_counter,
+            std::vector<std::pair<Pattern, unsigned> > hus_prime = find_hus(pat, sdp_prime, r + 1, util_threshold, hus_counter,
                                                       max_len).first;
             push_back_uniques(hus, hus_prime);
         }

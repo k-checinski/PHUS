@@ -18,49 +18,44 @@
 bool has_item(const Item& item, const Sequence& sequence);
 
 /**
- * Computes utility of item in sequence. Sums every occurring of item multiplied by item utility in profit table.
+ * Computes utility of item in sequence. Sums every occurring of item.
  * @param item
  * @param seq
- * @param profit_table
  * @return value of utility of item
  */
-unsigned utility_of_item(const Item& item, const Sequence& seq, const ProfitTable& profit_table);
+unsigned utility_of_item(const Item &item, const Sequence &seq);
 
 /**
  * Finds maximum utility of given pattern in given sequence.
  * @param pattern
  * @param seq
- * @param profit_table
  * @return
  */
-unsigned utility_of_pattern(const Pattern& pattern, const Sequence& seq, const ProfitTable& profit_table);
+unsigned utility_of_pattern(const Pattern& pattern, const Sequence& seq);
 
 /**
  * Computes actual sequence utility in sequential database for given item. Sums utility of item for every sequence
  * for every sequence in database.
  * @param item
  * @param sdb
- * @param profit_table
  * @return value of actual sequence utility
  */
-unsigned actual_sequence_utility(const Item& item, const SDB& sdb, const ProfitTable& profit_table);
+unsigned actual_sequence_utility(const Item &item, const SDB &sdb);
 
 /**
  * Computes sequence utility. Sums utility of every transaction in sequence.
  * @param seq
- * @param profit_table
  * @return
  */
-unsigned sequence_utility(const Sequence& seq, const ProfitTable& profit_table);
+unsigned sequence_utility(const Sequence& seq);
 
 /**
  * Computes sequence utility upper bound for given item. Sums utility of sequences where item occurred.
  * @param item
  * @param sdb
- * @param profit_table
  * @return
  */
-unsigned sequence_utility_upper_bound(const Item& item, const SDB& sdb, const ProfitTable& profit_table);
+unsigned sequence_utility_upper_bound(const Item& item, const SDB& sdb);
 
 /**
  * Generates sequence based on given sequence. Keeps items from given set only. Removes empty transactions.
@@ -111,5 +106,7 @@ Transaction transaction_projection(const PatternElem& elem, const Transaction& t
 Sequence sequence_projection(const Pattern& prefix, const Sequence& sequence);
 
 std::ostream& operator<<(std::ostream& ost, const SDB& sdb);
+
+void transform_dataset_with_profit_table(SDB& sequences, const ProfitTable& profit_table);
 
 #endif //PHUS_EDAMI_SEQUENCE_H

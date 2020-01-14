@@ -21,15 +21,13 @@ TEST_CASE("Determining partitioning of transaction works") {
 }
 
 TEST_CASE("pattern_elem_utility return 0 if pattern doesn't partitioning a transaction") {
-    ProfitTable pt = {{1, 1}, {2, 2}, {3, 3}, {4,4}, {5, 5}};
     Transaction a = {{1, 2}, {4, 1}, {5, 1}};
     PatternElem b = {1, 3, 4};
-    REQUIRE(pattern_elem_utility(a, b, pt) == 0);
+    REQUIRE(pattern_elem_utility(a, b) == 0);
 }
 
 TEST_CASE("pattern_elem_utility is calculated properly") {
-    ProfitTable pt = {{1, 1}, {2, 2}, {3, 3}, {4,4}, {5, 5}};
-    Transaction a = {{1, 2}, {4, 1}, {5, 1}};
+    Transaction a = {{1, 2}, {4, 4}, {5, 5}};
     PatternElem b = {1, 5};
-    REQUIRE(pattern_elem_utility(a, b, pt) == 7);
+    REQUIRE(pattern_elem_utility(a, b) == 7);
 }
