@@ -12,12 +12,17 @@ void show_usage() {
     std::cout
             << "Implemented program discovers high utility sequential patterns in given dataset and specified by user minimum utility threshold. \n"
                "The dataset is expected to be delivered in a file where each line contains a sequence. \n"
-               "The first number is the total number of itemsets in this sequence. After that, each itemset is displayed, \nfirst by the number of items in this"
-               "itemset, then followed by the items in that itemset. Cardinality of items is randomly distributed, so is the profit table. \n \n";
+               "The first number is the total number of transactions in this sequence. After that, each transaction is displayed, \nfirst by the number of items in this"
+               "transaction, then followed by the items in it. Each item may be followed by its cardinality in parenthesis. \n"
+               "However specifying cardinalities is not obligatory - their values by default are generated randomly. Program will use \n"
+               "custom cardinalities if -c flag is provided. Input file may also include information about items profit values. If after the last sequence line \n"
+               "there will be a line 'PROFIT_TABLE' followed by lines in format: item item_value, user defined profit table will be used by the algorithm. \n"
+               "In another case it will be randomly generated. \n \n";
     std::cout << "Expected parameters: " << std::endl;
     std::cout << "-h help" << std::endl;;
     std::cout << "-i file with input data" << std::endl;
-    std::cout << "-t minimum utility threshold" << std::endl;
+    std::cout << "-c flag whether input file contains items cardinalities. If not specified, their values will be randomly generated" << std::endl;
+    std::cout << "-t minimum utility threshold (default: 80)" << std::endl;
     std::cout << "-m maximum pattern length (default: 0 - no maximum length)" << std::endl;
     std::cout << "-n how many times algorithm should be run (default: 1)" << std::endl;
 }
@@ -32,6 +37,7 @@ int main(int argc, char *argv[]) {
     unsigned minimum_utility_threshold = DEFAULT_MIN_UTILITY_THRESHOLD;
 
     unsigned max_length = 0, repeat_number = 1;
+    bool should_generate_items_count = true;
     std::string input_file;
 
     for (int i = 1; i < argc; ++i) {
@@ -59,6 +65,8 @@ int main(int argc, char *argv[]) {
             } else {
                 std::cout << "maximum pattern length not specified" << std::endl;
             }
+        } else if (arg == "-c") {
+            should_generate_items_count = false;
         } else if (arg == "-n") {
             if (i + 1 < argc) {
                 repeat_number = std::stoi(argv[++i]);
@@ -77,16 +85,18 @@ int main(int argc, char *argv[]) {
     }
 
     SequenceReader sequence_reader;
-    std::pair<SDB, ProfitTable> dataset = sequence_reader.prepare_data_for_sequence_mining(input_file);
+    std::pair<SDB, ProfitTable> dataset;
 
-    std::cout<<"Dataset"<<std::endl;
-    std::cout<<dataset.first<<std::endl;
-    std::cout<<"Profit table:"<<std::endl;
-    std::cout<<dataset.second<<std::endl;
+    dataset = sequence_reader.read_dataset(input_file, should_generate_items_count);
+
+    std::cout << "Dataset" << std::endl;
+    std::cout << dataset.first << std::endl;
+    std::cout << "Profit table:" << std::endl;
+    std::cout << dataset.second << std::endl;
 
     transform_dataset_with_profit_table(dataset.first, dataset.second);
     std::set<Item> items;
-    for (const auto& item : dataset.second) {
+    for (const auto &item : dataset.second) {
         items.insert(item.first);
     }
 
@@ -110,7 +120,7 @@ int main(int argc, char *argv[]) {
         std::cout << "Algorithm took " << run_time << " [ms]:" << "\n";
 
         for (const auto &pat: found_patterns)
-            std::cout << pat.first << "\tasu: "<< pat.second << "\n";
+            std::cout << pat.first << "\tasu: " << pat.second << "\n";
 
         DiscoveredPatternStatistics statistics = get_statistics(found_patterns);
         std::cout << "Patterns minimum cardinality: " << statistics.min << "\n";
