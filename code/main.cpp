@@ -12,8 +12,8 @@ void show_usage() {
     std::cout
             << "Implemented program discovers high utility sequential patterns in given dataset and specified by user minimum utility threshold. \n"
                "The dataset is expected to be delivered in a file where each line contains a sequence. \n"
-               "The first number is the total number of transactions in this sequence. After that, each transaction is displayed, \nfirst by the number of items in this"
-               "transaction, then followed by the items in it. Each item may be followed by its cardinality in parenthesis. \n"
+               "The first number is the total number of transactions in this sequence. After that, each transaction is displayed, \n"
+               "first by the number of items in this transaction, then followed by the items in it. Each item may be followed by its cardinality in parenthesis. \n"
                "However specifying cardinalities is not obligatory - their values by default are generated randomly. Program will use \n"
                "custom cardinalities if -c flag is provided. Input file may also include information about items profit values. If after the last sequence line \n"
                "there will be a line 'PROFIT_TABLE' followed by lines in format: item item_value, user defined profit table will be used by the algorithm. \n"
@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
     std::vector<DiscoveredPatternStatistics> algorithm_runs_statistics;
 
     unsigned total_time = 0;
-
+    bool should_display_statistics_summary = false;
     for (unsigned i = 1; i <= repeat_number; i++) {
 
         std::cout << "[Iteration " << i << "] \n";
@@ -122,19 +122,22 @@ int main(int argc, char *argv[]) {
         for (const auto &pat: found_patterns)
             std::cout << pat.first << "\tasu: " << pat.second << "\n";
 
-        DiscoveredPatternStatistics statistics = get_statistics(found_patterns);
-        std::cout << "Patterns minimum cardinality: " << statistics.min << "\n";
-        std::cout << "Patterns average cardinality: " << statistics.average << "\n";
-        std::cout << "Patterns maximum cardinality: " << statistics.max << "\n";
-        std::cout << "Patterns cardinality standard deviation: " << statistics.std_dev << "\n";
+        if (!found_patterns.empty()) {
+            DiscoveredPatternStatistics statistics = get_statistics(found_patterns);
+            std::cout << "Patterns minimum cardinality: " << statistics.min << "\n";
+            std::cout << "Patterns average cardinality: " << statistics.average << "\n";
+            std::cout << "Patterns maximum cardinality: " << statistics.max << "\n";
+            std::cout << "Patterns cardinality standard deviation: " << statistics.std_dev << "\n";
 
-        algorithm_runs_statistics.push_back(statistics);
+            algorithm_runs_statistics.push_back(statistics);
+            should_display_statistics_summary = true;
+        }
         total_time += run_time;
     }
+    if (should_display_statistics_summary && algorithm_runs_statistics.size() != 1) {
+        show_average_from_statistics(algorithm_runs_statistics);
+    }
 
-    show_average_from_statistics(algorithm_runs_statistics);
-
-    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::cout << "[TIME] average algorithm execution time: "
               << total_time / repeat_number << "[ms]"
               << std::endl;
