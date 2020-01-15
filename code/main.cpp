@@ -12,13 +12,17 @@ void show_usage() {
     std::cout
             << "Implemented program discovers high utility sequential patterns in given dataset and specified by user minimum utility threshold. \n"
                "The dataset is expected to be delivered in a file where each line contains a sequence. \n"
-               "The first number is the total number of itemsets in this sequence. After that, each itemset is displayed, \nfirst by the number of items in this"
-               "itemset, then followed by the items in that itemset. Cardinality of items is randomly distributed, so is the profit table. \n \n";
+               "The first number is the total number of transactions in this sequence. After that, each transaction is displayed, \nfirst by the number of items in this"
+               "transaction, then followed by the items in it. Each item may be followed by its cardinality in parenthesis. \n"
+               "However specifying cardinalities is not obligatory - their values by default are generated randomly. Program will use \n"
+               "custom cardinalities if -c flag is provided. Input file may also include information about items profit values. If after the last sequence line \n"
+               "there will be a line 'PROFIT_TABLE' followed by lines in format: item item_value, user defined profit table will be used by the algorithm. \n"
+               "In another case it will be randomly generated. \n \n";
     std::cout << "Expected parameters: " << std::endl;
     std::cout << "-h help" << std::endl;;
     std::cout << "-i file with input data" << std::endl;
-    std::cout << "-c input file contains items count" << std::endl;
-    std::cout << "-t minimum utility threshold" << std::endl;
+    std::cout << "-c flag whether input file contains items cardinalities. If not specified, their values will be randomly generated" << std::endl;
+    std::cout << "-t minimum utility threshold (default: 80)" << std::endl;
     std::cout << "-m maximum pattern length (default: 0 - no maximum length)" << std::endl;
     std::cout << "-n how many times algorithm should be run (default: 1)" << std::endl;
 }
