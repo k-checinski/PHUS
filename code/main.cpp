@@ -17,6 +17,7 @@ void show_usage() {
     std::cout << "Expected parameters: " << std::endl;
     std::cout << "-h help" << std::endl;;
     std::cout << "-i file with input data" << std::endl;
+    std::cout << "-c input file contains items count" << std::endl;
     std::cout << "-t minimum utility threshold" << std::endl;
     std::cout << "-m maximum pattern length (default: 0 - no maximum length)" << std::endl;
     std::cout << "-n how many times algorithm should be run (default: 1)" << std::endl;
@@ -32,6 +33,7 @@ int main(int argc, char *argv[]) {
     unsigned minimum_utility_threshold = DEFAULT_MIN_UTILITY_THRESHOLD;
 
     unsigned max_length = 0, repeat_number = 1;
+    bool should_generate_items_count = true;
     std::string input_file;
 
     for (int i = 1; i < argc; ++i) {
@@ -59,6 +61,8 @@ int main(int argc, char *argv[]) {
             } else {
                 std::cout << "maximum pattern length not specified" << std::endl;
             }
+        } else if (arg == "-c") {
+            should_generate_items_count = false;
         } else if (arg == "-n") {
             if (i + 1 < argc) {
                 repeat_number = std::stoi(argv[++i]);
@@ -77,16 +81,18 @@ int main(int argc, char *argv[]) {
     }
 
     SequenceReader sequence_reader;
-    std::pair<SDB, ProfitTable> dataset = sequence_reader.prepare_data_for_sequence_mining(input_file);
+    std::pair<SDB, ProfitTable> dataset;
 
-    std::cout<<"Dataset"<<std::endl;
-    std::cout<<dataset.first<<std::endl;
-    std::cout<<"Profit table:"<<std::endl;
-    std::cout<<dataset.second<<std::endl;
+    dataset = sequence_reader.read_dataset(input_file, should_generate_items_count);
+
+    std::cout << "Dataset" << std::endl;
+    std::cout << dataset.first << std::endl;
+    std::cout << "Profit table:" << std::endl;
+    std::cout << dataset.second << std::endl;
 
     transform_dataset_with_profit_table(dataset.first, dataset.second);
     std::set<Item> items;
-    for (const auto& item : dataset.second) {
+    for (const auto &item : dataset.second) {
         items.insert(item.first);
     }
 
@@ -110,7 +116,7 @@ int main(int argc, char *argv[]) {
         std::cout << "Algorithm took " << run_time << " [ms]:" << "\n";
 
         for (const auto &pat: found_patterns)
-            std::cout << pat.first << "\tasu: "<< pat.second << "\n";
+            std::cout << pat.first << "\tasu: " << pat.second << "\n";
 
         DiscoveredPatternStatistics statistics = get_statistics(found_patterns);
         std::cout << "Patterns minimum cardinality: " << statistics.min << "\n";
