@@ -24,6 +24,7 @@ void show_usage() {
     std::cout << "-c flag whether input file contains items cardinalities. If not specified, their values will be randomly generated" << std::endl;
     std::cout << "-t minimum utility threshold (default: 80)" << std::endl;
     std::cout << "-m maximum pattern length (default: 0 - no maximum length)" << std::endl;
+    std::cout << "-s show transformed dataset (with quantities multiplied by value from profit table)" << std::endl;
     std::cout << "-n how many times algorithm should be run (default: 1)" << std::endl;
 }
 
@@ -38,6 +39,7 @@ int main(int argc, char *argv[]) {
 
     unsigned max_length = 0, repeat_number = 1;
     bool should_generate_items_count = true;
+    bool show_transformed_dataset = false;
     std::string input_file;
 
     for (int i = 1; i < argc; ++i) {
@@ -67,6 +69,8 @@ int main(int argc, char *argv[]) {
             }
         } else if (arg == "-c") {
             should_generate_items_count = false;
+        } else if (arg == "-s") {
+            show_transformed_dataset = true;
         } else if (arg == "-n") {
             if (i + 1 < argc) {
                 repeat_number = std::stoi(argv[++i]);
@@ -89,12 +93,18 @@ int main(int argc, char *argv[]) {
 
     dataset = sequence_reader.read_dataset(input_file, should_generate_items_count);
 
-    std::cout << "Dataset" << std::endl;
+    std::cout << "Dataset:" << std::endl;
     std::cout << dataset.first << std::endl;
     std::cout << "Profit table:" << std::endl;
-    std::cout << dataset.second << std::endl;
+    std::cout << dataset.second << std::endl << std::endl;
 
     transform_dataset_with_profit_table(dataset.first, dataset.second);
+    if (show_transformed_dataset) {
+        std::cout << "Transformed dataset:" << std::endl;
+        std::cout << dataset.first << std::endl;
+    }
+
+
     std::set<Item> items;
     for (const auto &item : dataset.second) {
         items.insert(item.first);
